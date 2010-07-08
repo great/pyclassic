@@ -12,7 +12,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', 
-        'NAME': '/home/fittiche/com.nhn.classic/classic/database.sqlite3', 
+        'NAME': '/var/tmp/com.nhn.club/classic.sqlite3', 
         'USER': '',
         'PASSWORD': '', 
         'HOST': '', 

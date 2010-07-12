@@ -1,0 +1,9 @@
+{% if lesson_rounds %}
+    <ul>
+    {% for round in lesson_rounds %}
+        <li><a href="/basis/{{ round.id }}/">{{round.month}}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No rounds are available.</p>
+{% endif %}

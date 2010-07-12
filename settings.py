@@ -1,4 +1,7 @@
 # Django settings for classic project.
+import os
+
+APP_BASE = os.environ["HOME"] + "/com.nhn.club"
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -12,7 +15,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', 
-        'NAME': '/var/tmp/com.nhn.club/classic.sqlite3', 
+        'NAME': APP_BASE + '/classic.sqlite3', 
         'USER': '',
         'PASSWORD': '', 
         'HOST': '', 
@@ -78,7 +81,7 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-	"/home/fittiche/com.nhn.club/classic/templates",
+	APP_BASE + "/classic/templates",
 )
 
 INSTALLED_APPS = (

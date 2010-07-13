@@ -1,3 +1,17 @@
+<html>
+<head>
+	<title>nhn classical music club lesson fee management app</title>
+</head>
+<body>
+<h1>레슨 회차 관리</h1>
+<h2>현재: {{today}}</h2>
+
+<ul>
+	<li><a href="/basis/arrange/">{{current_month}}월 레슨 관리</a></li>
+	<li><a href="/basis/create/">{{next_month}}월 레슨관리 생성</a></li>
+</ul>
+
+<h3>Lesson Round Archives:</h3>
 {% if lesson_rounds %}
     <ul>
     {% for round in lesson_rounds %}
@@ -5,5 +19,7 @@
     {% endfor %}
     </ul>
 {% else %}
-    <p>No rounds are available.</p>
+    <p>No lesson round archives.</p>
 {% endif %}
+<body>
+</html>

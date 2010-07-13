@@ -14,4 +14,6 @@ urlpatterns = patterns('',
 
 	(r'^admin/', include(admin.site.urls)),
 	(r'^basis/$', 'classic.basis.views.list'),
+	#	(r'^basis/arrange/$', 'classic.basis.views.arrange_lesson'),
+	(r'^basis/create/$', 'classic.basis.views.create_lesson'),
 )

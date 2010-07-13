@@ -4,10 +4,39 @@
 </head>
 <body>
 <h1>회원 명부 관리</h1>
-<ul>
-	{% for member in members %}
-		<li>{{round.month}}</li>
-	{% endfor %}
-</ul>
-<body>
+
+{% if members %}
+    <table>
+		<tr>
+			<th>사번</th>
+			<th>이름</th>
+			<th>소속</th>
+			<th>호칭</th>
+			<th>가입일</th>
+			<th>운영진</th>
+			<th>email</th>
+			<th>핸드폰번호</th>
+			<th>소속부서</th>
+			<th>레슨신청수</th>
+		</tr>
+    {% for member in members %}
+		<tr>
+			<td>{{member.empno}}</td>
+			<td>{{member.name}}</td>
+			<td>{{member.company}}</td>
+			<td>{{member.title}}</td>
+			<td>{{member.join_date}}</td>
+			<td>{{member.club_role}}</td>
+			<td>{{member.email}}</td>
+			<td>{{member.cellular}}</td>
+			<td>{{member.department}}</td>
+			<td>{{member.lesson_count}}</td>
+		</tr>
+    {% endfor %}
+    </table>
+{% else %}
+    <p>No members.</p>
+{% endif %}
+
+</body>
 </html>

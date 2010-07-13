@@ -1,4 +1,4 @@
-from classic.basis.models import Round, Member
+from classic.basis.models import Rotation, Member
 from django.contrib import admin
 
-admin.site.register(Round)
+admin.site.register(Rotation)

@@ -13,8 +13,9 @@ urlpatterns = patterns('',
 	# (r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
 	(r'^admin/', include(admin.site.urls)),
-	(r'^basis$', 'classic.basis.views.list'),
+	(r'^manage$', 'classic.basis.views.list_basis'),
 	#	(r'^basis/arrange$', 'classic.basis.views.arrange_lesson'),
+	(r'^manage/create$', 'classic.basis.views.create_basis'),
 	(r'^basis/create$', 'classic.basis.views.create_lesson'),
 	(r'^basis/members$', 'classic.basis.views.list_members'),
 )

@@ -12,14 +12,14 @@
 </ul>
 
 <h3>Lesson Round Archives:</h3>
-{% if lesson_rounds %}
+{% if rotations %}
     <ul>
-    {% for round in lesson_rounds %}
-        <li><a href="/basis/{{ round.id }}/">{{round.month}}</a></li>
+    {% for rotation in rotations %}
+        <li><a href="/basis/{{ rotation.id }}/">{{rotation.rotation}}</a></li>
     {% endfor %}
     </ul>
 {% else %}
-    <p>No lesson round archives.</p>
+    <p>No lesson rotations archives.</p>
 {% endif %}
 <body>
 </html>

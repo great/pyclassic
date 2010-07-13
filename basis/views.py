@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.http import HttpResponse
-from classic.basis.models import Round, Member
+from classic.basis.models import Rotation, Member
 from django.template import Context, loader
 from datetime import date
 from dateutil.relativedelta import *
@@ -10,14 +10,14 @@ import xlrd
 
 APP_BASE = os.environ["HOME"] + "/com.nhn.club"
 
-def list(request):
+def list_basis(request):
 	today = date.today()
 	next_month = today + relativedelta(months=+1)
 
-	lesson_rounds = Round.objects.all().order_by("-month")[:12]
-	t = loader.get_template("rounds.html")
+	rotations = Rotation.objects.all().order_by("-rotation")[:12]
+	t = loader.get_template("rotations.html")
 	c = Context({
-		"lesson_rounds": lesson_rounds,
+		"rotations": rotations,
 		"today": today,
 		"current_year": today.strftime("%Y"),
 		"current_month": today.strftime("%m"),
@@ -32,8 +32,8 @@ def create_lesson(request):
 	book = xlrd.open_workbook(APP_BASE + "/test_members.xls", encoding_override="cp949")
 	sheet = book.sheet_by_index(0)
 
-	_round = Round(month_basis="201007", creation_date=today)
-	import_members(_round, sheet)
+	rotation = Rotation(rotation="201007", creation_date=today)
+	import_members(rotation, sheet)
 
 	t = loader.get_template("members.html")
 
@@ -42,11 +42,11 @@ def create_lesson(request):
 	})
 	return HttpResponse(t.render(c))
 
-def import_members(basis, excel_sheet):
+def import_members(rotation, excel_sheet):
 	for i in xrange(1, excel_sheet.nrows):
 		row = excel_sheet.row_values(i)
 		member = Member(
-			month_basis = basis,
+			rotation = rotation,
 			empno = row[3],
 			name = row[2],
 			company = row[4],
@@ -61,7 +61,7 @@ def import_members(basis, excel_sheet):
 		member.save()
 
 def list_members(request):
-	members = Member.objects.filter(month_basis="201007")
+	members = Member.objects.filter(rotation="201007")
 	t = loader.get_template("members.html")
 	c = Context({
 		"members": members,

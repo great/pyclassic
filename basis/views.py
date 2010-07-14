@@ -16,7 +16,7 @@ def list_basis(request):
 
 	current_rotation = Rotation.objects.filter(pk=today.strftime("%Y%m"))
 	next_rotation = Rotation.objects.filter(pk=next_month.strftime("%Y%m"))
-	rotations = Rotation.objects.all().order_by("-rotation")[:12]
+	rotations = Rotation.objects.exclude(archive=False).order_by("-rotation")[:12]
 
 	t = loader.get_template("rotations.html")
 	c = Context({
@@ -24,7 +24,6 @@ def list_basis(request):
 		"next_rotation": next_rotation,
 		"rotations": rotations,
 		"today": today,
-		"current_year": today.strftime("%Y"),
 		"current_month": today.strftime("%m"),
 		"next_month": next_month.strftime("%m"),
 	})

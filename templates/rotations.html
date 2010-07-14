@@ -21,13 +21,11 @@
 		<tr>
 			<th>차수</th>
 			<th>회원기준일</th>
-			<th>비고</th>
 		</tr>
     {% for rotation in rotations %}
 		<tr>
 	        <td><a href="/basis/{{ rotation.id }}/">{{rotation.rotation}}</a></td>
 			<td>{{rotation.creation_date}}</td>
-			<td>{% if not rotation.archive %}관리중{% endif %}</td>
 		</tr>
     {% endfor %}
     </table>

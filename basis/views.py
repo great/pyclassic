@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.http import HttpResponse
+from django.core.context_processors import csrf
 from classic.basis.models import Rotation, Member
 from django.template import Context, loader
 from datetime import date
@@ -45,6 +46,13 @@ def create_lesson(request):
 	})
 	return HttpResponse(t.render(c))
 
+def import_excel(request):
+	today = date.today()
+	book = xlrd.open_workbook(file_contents=request.FILES["excel"].read(), encoding_override="cp949")
+	sheet = book.sheet_by_index(0)
+	rotation = Rotation(rotation="200907", creation_date=today)
+	import_members(rotation, sheet)
+	
 def import_members(rotation, excel_sheet):
 	for i in xrange(1, excel_sheet.nrows):
 		row = excel_sheet.row_values(i)
@@ -75,6 +83,7 @@ def list_members(request):
 		"rotation": rotation,
 		"members": members,
 	})
+	c.update(csrf(request))
 	return HttpResponse(t.render(c))
 
 

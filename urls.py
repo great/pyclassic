@@ -18,4 +18,5 @@ urlpatterns = patterns('',
 	(r'^manage$', 'classic.basis.views.rotations'),
 	#	(r'^basis/arrange$', 'classic.basis.views.arrange_lesson'),
 	(r'^manage/prepare$', 'classic.basis.views.list_members'),
+	(r'^manage/import$', 'classic.basis.views.import_excel'),
 )

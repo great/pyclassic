@@ -4,8 +4,8 @@
 </head>
 <body>
 <h1>회원 명부 관리</h1>
-<form name="member" enctype="multipart/form-data" action="/manage/import" action="post">
-	<input type="file" name="excel" />
+<form name="member" enctype="multipart/form-data" action="/manage/import" method="post">{% csrf_token %}
+	<input type="file" name="excel" size="100" />
 	<input type="submit" value="import excel" />
 </form>
 

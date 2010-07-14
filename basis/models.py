@@ -7,7 +7,7 @@ class Rotation(models.Model):
 	archive			= models.BooleanField(default=False)
 
 	def __unicode__(self):
-		return self.month_basis
+		return self.rotation
 
 class Member(models.Model):
 	rotation		= models.ForeignKey(Rotation)

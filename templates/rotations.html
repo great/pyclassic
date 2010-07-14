@@ -4,20 +4,33 @@
 </head>
 <body>
 <h1>레슨 회차 관리</h1>
-<h2>현재: {{today}}</h2>
 
-<ul>
-	<li><a href="/basis/arrange/">{{current_month}}월 레슨 관리</a></li>
-	<li><a href="/basis/create/">{{next_month}}월 레슨관리 생성</a></li>
-</ul>
+<dl>
+	<dt>{{today}}</dt>
+	{% if current_rotation and not current_rotation.archive %}
+		<dd><a href="/manage/arrange">{{current_month}}월 레슨 관리</a></dd>
+	{% endif %}
+	{% if not next_rotation %}
+		<dd><a href="/manage/prepare">{{next_month}}월 레슨관리 생성</a></dd>
+	{% endif %}
+</dl>
 
 <h3>Lesson Round Archives:</h3>
 {% if rotations %}
-    <ul>
+    <table>
+		<tr>
+			<th>차수</th>
+			<th>회원기준일</th>
+			<th>비고</th>
+		</tr>
     {% for rotation in rotations %}
-        <li><a href="/basis/{{ rotation.id }}/">{{rotation.rotation}}</a></li>
+		<tr>
+	        <td><a href="/basis/{{ rotation.id }}/">{{rotation.rotation}}</a></td>
+			<td>{{rotation.creation_date}}</td>
+			<td>{% if not rotation.archive %}관리중{% endif %}</td>
+		</tr>
     {% endfor %}
-    </ul>
+    </table>
 {% else %}
     <p>No lesson rotations archives.</p>
 {% endif %}

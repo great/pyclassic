@@ -12,10 +12,10 @@ urlpatterns = patterns('',
 	# to INSTALLED_APPS to enable admin documentation:
 	# (r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
+	(r'^__import__$', 'classic.basis.views.create_lesson'),
+
 	(r'^admin/', include(admin.site.urls)),
-	(r'^manage$', 'classic.basis.views.list_basis'),
+	(r'^manage$', 'classic.basis.views.rotations'),
 	#	(r'^basis/arrange$', 'classic.basis.views.arrange_lesson'),
-	(r'^manage/create$', 'classic.basis.views.create_basis'),
-	(r'^basis/create$', 'classic.basis.views.create_lesson'),
-	(r'^basis/members$', 'classic.basis.views.list_members'),
+	(r'^manage/prepare$', 'classic.basis.views.list_members'),
 )

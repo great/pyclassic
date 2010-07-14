@@ -4,8 +4,14 @@
 </head>
 <body>
 <h1>회원 명부 관리</h1>
+<form name="member" enctype="multipart/form-data" action="/manage/import" action="post">
+	<input type="file" name="excel" />
+	<input type="submit" value="import excel" />
+</form>
 
 {% if members %}
+<h3>기준일: {{rotation.creation_date}}</h3>
+
     <table>
 		<tr>
 			<th>사번</th>
@@ -35,7 +41,7 @@
     {% endfor %}
     </table>
 {% else %}
-    <p>No members.</p>
+    <p>No members yet.</p>
 {% endif %}
 
 </body>

@@ -10,7 +10,7 @@ import xlrd
 
 APP_BASE = os.environ["HOME"] + "/com.nhn.club"
 
-def list_basis(request):
+def rotations(request):
 	today = date.today()
 	next_month = today + relativedelta(months=+1)
 
@@ -63,12 +63,22 @@ def import_members(rotation, excel_sheet):
 		)
 		member.save()
 
+
 def list_members(request):
+	try:
+		rotation = Rotation.objects.get(pk="201007")
+	except Rotation.DoesNotExist:
+		rotation = Rotation()
 	members = Member.objects.filter(rotation="201007")
 	t = loader.get_template("members.html")
 	c = Context({
+		"rotation": rotation,
 		"members": members,
 	})
-
 	return HttpResponse(t.render(c))
+
+
+def prepare_rotation(request):
+	today = date.today()
+	next_month = date.today() + relativedelta(months=+1)
 

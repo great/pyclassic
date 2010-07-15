@@ -1,2 +1,9 @@
 This is a web application for classical music club lesson management.
-Written in python language, using Django framework.
+Written in python language, using Django framework. version 1.2.1
+
+required libraries are:
+xlrd - the excel library.
+dateutil - from pypi
+
+development hold.
+

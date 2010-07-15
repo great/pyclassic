@@ -89,5 +89,16 @@ def list_members(request):
 
 def prepare_rotation(request):
 	today = date.today()
-	next_month = date.today() + relativedelta(months=+1)
+	next_month = today + relativedelta(months=+1)
+
+def test_here(request):
+	today = Rotation.next()
+	if today:
+		print today
+	else:
+		print "NULL"
+	t = loader.get_template("test_here.html")
+	c = Context({
+	})
+	return HttpResponse(t.render(c))
 

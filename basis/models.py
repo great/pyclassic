@@ -11,7 +11,8 @@ class Rotation(models.Model):
 	def __unicode__(self):
 		return self.rotation
 
-	def exist_rotation():
+	@staticmethod
+	def exist_current():
 		today = date.today()
 		try:
 			Rotation.objects.get(pk=today.strftime("%Y%m"))
@@ -19,14 +20,25 @@ class Rotation(models.Model):
 		except Rotation.DoesNotExist:
 			return False
 
-	def current_rotation():
+	@staticmethod
+	def current():
 		today = date.today()
 		try:
 			return Rotation.objects.get(pk=today.strftime("%Y%m"))
 		except Rotation.DoesNotExist:
-			return False
+			pass
 
-	def create_rotation():
+	@staticmethod
+	def next():
+		today = date.today()
+		next = today + relativedelta(months=+1)
+		try:
+			return Rotation.objects.get(pk=next.strftime("%Y%m"))
+		except Rotation.DoesNotExist:
+			pass
+
+	@staticmethod
+	def create():
 		pass
 
 class Member(models.Model):

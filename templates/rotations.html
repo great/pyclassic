@@ -6,7 +6,7 @@
 <h1>레슨 회차 관리</h1>
 
 <dl>
-	<dt>{{today}}</dt>
+	<dt>{% now "Y년 m월 d일" %}</dt>
 	{% if current_rotation and not current_rotation.archive %}
 		<dd><a href="/manage/arrange">{{current_month}}월 레슨 관리</a></dd>
 	{% endif %}

@@ -24,7 +24,6 @@ def rotations(request):
 		"current_rotation": current_rotation,
 		"next_rotation": next_rotation,
 		"rotations": rotations,
-		"today": today,
 		"current_month": today.strftime("%m"),
 		"next_month": next_month.strftime("%m"),
 	})

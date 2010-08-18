@@ -7,20 +7,29 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    # ('Your Name', 'your_email@domain.com'),
+	# ('Your Name', 'your_email@domain.com'),
 )
 
 MANAGERS = ADMINS
 
+ROTATIONAL_DATABASE = APP_BASE + '/lesson_management.sqlite3'
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3', 
-        'NAME': APP_BASE + '/classic.sqlite3', 
-        'USER': '',
-        'PASSWORD': '', 
-        'HOST': '', 
-        'PORT': '',
-    }
+	'default': {
+		'ENGINE': 'django.db.backends.sqlite3', 
+		'NAME': APP_BASE + '/master.sqlite3', 
+		'USER': '',
+		'PASSWORD': '', 
+		'HOST': '', 
+		'PORT': '',
+	},
+	'slot': {
+		'ENGINE': 'django.db.backends.sqlite3', 
+		'NAME': ROTATIONAL_DATABASE, 
+		'USER': '',
+		'PASSWORD': '', 
+		'HOST': '', 
+		'PORT': '',
+	}
 }
 
 # Local time zone for this installation. Choices can be found here:
@@ -50,7 +59,7 @@ MEDIA_ROOT = ''
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
-MEDIA_URL = ''
+MEDIA_URL = '/resources/'
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
@@ -62,35 +71,35 @@ SECRET_KEY = '$66iyrj+vredzj7z5k7ufms^+#7m03)_5p-0+8)o%9qx8mjb_u'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
+	'django.template.loaders.filesystem.Loader',
+	'django.template.loaders.app_directories.Loader',
+#	'django.template.loaders.eggs.Loader',
 )
 
 MIDDLEWARE_CLASSES = (
-    'django.middleware.common.CommonMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
+	'django.middleware.common.CommonMiddleware',
+	'django.contrib.sessions.middleware.SessionMiddleware',
+	'django.middleware.csrf.CsrfViewMiddleware',
+	'django.contrib.auth.middleware.AuthenticationMiddleware',
+	'django.contrib.messages.middleware.MessageMiddleware',
 )
 
 ROOT_URLCONF = 'classic.urls'
 
 TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
+	# Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
+	# Always use forward slashes, even on Windows.
+	# Don't forget to use absolute paths, not relative paths.
 	APP_BASE + "/classic/templates",
 )
 
 INSTALLED_APPS = (
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.sites',
-    'django.contrib.messages',
-    # Uncomment the next line to enable the admin:
-    'django.contrib.admin',
-    'classic.basis',
+	'django.contrib.auth',
+	'django.contrib.contenttypes',
+	'django.contrib.sessions',
+	'django.contrib.sites',
+	'django.contrib.messages',
+	'django.contrib.admin',
+	'classic.master',
+	'classic.lesson',
 )

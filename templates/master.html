@@ -3,11 +3,14 @@
 	<title>nhn classical music club lesson fee management app</title>
 	<link href="/resources/base.css" rel="stylesheet" type="text/css" media="screen" /> </head>
 <body>
-<h1>레슨 회차 관리</h1>
+<div id="billboard"> 
+	<h1>Lesson Master Management</h1>
+</div> 
 
-<h3>Lesson Master Management:</h3>
-<h4>{% now "Y년 m월 d일" %}</h4>
-<hr />
+<div id="columnwrap"> 
+
+	<div id="content-main"> 
+		
 <table class="docutils">
 	<tr>
 		<th>차수</th>
@@ -24,7 +27,7 @@
 	{% endfor %}
 {% else %}
 	<tr>
-        <th colspan="3"">No lesson rotations.</th>
+        <th colspan="3">No lesson rotations.</th>
 	</tr>
 {% endif %}
 </table>
@@ -37,5 +40,9 @@
 	<input type="file" name="excel" size="30" />
 	<input type="submit" value="다음달({{next_month}}월) 레슨관리 페이지 생성" />
 </form>
+</div>
+<h3>Lesson Master Management:</h3>
+<h4>{% now "Y년 m월 d일" %}</h4>
+</div>
 </body>
 </html>

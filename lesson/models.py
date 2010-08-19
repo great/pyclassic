@@ -27,6 +27,7 @@ class Teacher(models.Model):
 	def students(self):
 		return len(LessonClass.objects.filter(teacher=self.id))
 
+
 class LessonClass(models.Model):
 	empid		= models.ForeignKey(Member)
 	teacher		= models.ForeignKey(Teacher)

@@ -2,6 +2,9 @@
 import os
 
 APP_BASE = os.environ["HOME"] + "/com.nhn.club"
+STORAGE_BASE = APP_BASE + '/classic/data_store'
+MASTER_CATALOG = STORAGE_BASE + '/master_catalog.map'
+DATABASE = STORAGE_BASE + '/master.sqlite3'
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -11,21 +14,15 @@ ADMINS = (
 )
 
 MANAGERS = ADMINS
-
-ROTATIONAL_DATABASE = APP_BASE + '/lesson_management.sqlite3'
 DATABASES = {
 	'default': {
-		'ENGINE': 'django.db.backends.sqlite3', 
-		'NAME': APP_BASE + '/master.sqlite3', 
+		'ENGINE': 'django.db.backends.sqlite3',
+		'NAME': DATABASE,
 		'USER': '',
 		'PASSWORD': '', 
 		'HOST': '', 
 		'PORT': '',
 	},
-	'slot': {
-		'ENGINE': 'django.db.backends.sqlite3', 
-		'NAME': ROTATIONAL_DATABASE, 
-	}
 }
 
 # Local time zone for this installation. Choices can be found here:

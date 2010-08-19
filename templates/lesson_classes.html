@@ -1,0 +1,55 @@
+<html>
+<head>
+	<title>nhn classical music club lesson fee management app</title>
+</head>
+<body>
+<h1>회원 명부 관리</h1>
+
+<form name="clss" method="post">
+<table>
+	<tr>
+		<th>사번</th>
+		<th>레슨악기</th>
+		<th>강사</th>
+		<th>이름</th>
+		<th>소속부서</th>
+		<th>기본</th>
+		<th>운영</th>
+		<th>연주</th>
+		<th>계</th>
+		<th>신청수</th>
+	</tr>
+{% for clss in classes %}
+	<tr>
+		<td>{{clss.empid.empid}}</td>
+		<td>{{clss.teacher.lesson.alias}}</td>
+		<td>{{clss.teacher.name}}</td>
+		<td>{{clss.name}}</td>
+		<td>{{clss.department}}</td>
+		<td>{{clss.base}}</td>
+		<td>{{clss.operational}}</td>
+		<td>{{clss.performance}}</td>
+		<td>{{clss.net}}</td>
+		<td>{{clss.empid.lesson_count}}</td>
+	</tr>
+{% empty %}
+	<tr>
+	    <td colspan="10">No members yet.</td>
+	</tr>
+	<tr>
+		<td><input type="text" name="empid" /></td>
+		<td>...</td>
+		<td><input type="text" name="teacher" /></td>
+		<td><input type="text" name="name" /></td>
+		<td><input type="text" name="department" /></td>
+		<td><input type="text" name="base" /></td>
+		<td><input type="text" name="operational" /></td>
+		<td><input type="text" name="performance" /></td>
+		<td>0</td>
+		<td>0</td>
+	</tr>
+{% endfor %}
+</table>
+</form>
+</body>
+</html>

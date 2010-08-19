@@ -1,4 +1,4 @@
-from classic.master.models import Master
+from classic.master.models import Member
 from django.contrib import admin
 
-admin.site.register(Master)
+admin.site.register(Member)

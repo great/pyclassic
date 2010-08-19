@@ -1,9 +1,15 @@
 <html>
 <head>
 	<title>nhn classical music club lesson fee management app</title>
+	<link href="/resources/base.css" rel="stylesheet" type="text/css" media="screen" /> </head>
 </head>
 <body>
-<h1>회원 명부 관리</h1>
+<div id="billboard"> 
+	<h1>Lesson Apply Management</h1>
+</div> 
+
+<div id="columnwrap"> 
+	<div id="content-main"> 
 
 <form name="clss" method="post">
 <table>
@@ -21,7 +27,7 @@
 	</tr>
 {% for clss in classes %}
 	<tr>
-		<td>{{clss.empid.empid}}</td>
+		<td>{{clss.empid}}</td>
 		<td>{{clss.teacher.lesson.alias}}</td>
 		<td>{{clss.teacher.name}}</td>
 		<td>{{clss.name}}</td>
@@ -30,7 +36,7 @@
 		<td>{{clss.operational}}</td>
 		<td>{{clss.performance}}</td>
 		<td>{{clss.net}}</td>
-		<td>{{clss.empid.lesson_count}}</td>
+		<td>{{clss.applies}}</td>
 	</tr>
 {% empty %}
 	<tr>
@@ -51,5 +57,27 @@
 {% endfor %}
 </table>
 </form>
+
+<ol>
+{% for lesson in lessons %}
+	<li>
+		{{lesson.name}}
+		<ol>
+		{% for classes in clss_map.items %}
+			<li>{{teacher.name}}</li>
+		{% endfor %}
+		</ol>
+	</li>
+{% endfor %}
+</ol>
+
+<ol>
+{% for teacher, classes in clss_map.items %}
+	<li>{{teacher.name}}</li>
+{% endfor %}
+</ol>
+
+</div>
+</div>
 </body>
 </html>

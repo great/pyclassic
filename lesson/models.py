@@ -7,12 +7,14 @@ from dateutil.relativedelta import *
 class Lesson(models.Model):
 	name	= models.CharField("Lesson", max_length=50)
 	alias	= models.CharField("레슨명", max_length=50)
+	active	= models.BooleanField(default=True)
 
 	def __unicode__(self):
 		return self.name
 
 	def teachers(self):
 		return len(Teacher.objects.filter(lesson=self.id).filter(active=True))
+
 
 class Teacher(models.Model):
 	name		= models.CharField("이름", max_length=50)
@@ -29,7 +31,7 @@ class Teacher(models.Model):
 
 
 class LessonClass(models.Model):
-	empid		= models.ForeignKey(Member)
+	empid		= models.CharField("사번", max_length=7)
 	teacher		= models.ForeignKey(Teacher)
 	name		= models.CharField("이름", max_length=50)
 	department	= models.CharField("소속부서", blank=True, max_length=50)
@@ -40,12 +42,31 @@ class LessonClass(models.Model):
 	def net(self):
 		return self.base + self.operational + self.performance
 
+	def is_member(self):
+		return bool(Member.objects.filter(pk=self.empid))
+
+	def applies(self):
+		return len(LessonClass.objects.filter(empid=self.empid))
+
+
+class Expense(models.Model):
+	ITEM_CHOICES = (
+		('GROUP', 'Group Lesson'),
+		('PARKING', 'Parking fee'),
+	)
+	teacher	= models.ForeignKey(Teacher)
+	item	= models.CharField(max_length=10, choices=ITEM_CHOICES)
+	desc	= models.CharField('내용', max_length=200, blank=True)
+	amount	= models.IntegerField('금액')
+
 
 class Performer(models.Model):
 	empid	= models.CharField("사번", max_length=7, primary_key=True)
 	desc	= models.CharField("연주내용", max_length=500)
 	applied	= models.BooleanField("반영여부", default=False)
 
+
 class Operator(models.Model):
 	empid	= models.ForeignKey(Member)
 	desc	= models.CharField("내용", max_length=100)
+

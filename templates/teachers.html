@@ -1,0 +1,27 @@
+<html>
+<head>
+	<title>nhn classical music club lesson fee management app</title>
+</head>
+<body>
+<h1>Teachers Management</h1>
+
+{% if teachers %}
+    <table>
+		<tr>
+			<th>이름</th>
+			<th>레슨악기</th>
+			<th>email</th>
+		</tr>
+    {% for teacher in teachers %}
+		<tr>
+			<td>{{teacher.name}}</td>
+			<td>{{teacher.lesson}}</td>
+			<td>{{teacher.email}}</td>
+		</tr>
+    {% endfor %}
+    </table>
+{% else %}
+    <p>No teachers yet.</p>
+{% endif %}
+</body>
+</html>

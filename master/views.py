@@ -33,15 +33,15 @@ def main(request, init_slot=None):
 
 def create_master(request):
 	today = date.today()
-	current_key = Master.current_key()
+	#current_key = Master.current_key()
 	next_key = Master.next_key()
 	book = xlrd.open_workbook(file_contents=request.FILES["excel"].read(), encoding_override="cp949")
 	sheet = book.sheet_by_index(0)
 	if (os.path.exists(ROTATIONAL_DATABASE)):
-		Popen(['cp', ROTATIONAL_DATABASE, ROTATIONAL_DATABASE + '.' + next_key])
-		archive = Master(rotation=next_key, creation_date=today, database = ROTATIONAL_DATABASE + '.' + current_key)
-		archive.save()
-		import_members(sheet)
+		archived_database = ROTATIONAL_DATABASE + '.' + next_key
+		Popen(['cp', ROTATIONAL_DATABASE, archived_database])
+		Master(rotation=next_key, creation_date=today, database = archived_database).save()
+		rebuild_members(sheet)
 		init_slot=None
 	else:
 		init_slot = init_slot_database()
@@ -54,12 +54,12 @@ def init_slot_database():
 	return "Database newly Initialized."
 
 #http://docs.djangoproject.com/en/dev/topics/db/multi-db/#manually-selecting-a-database
-def import_members(excel_sheet):
+def rebuild_members(excel_sheet):
 	Member.objects.using('slot').all().delete()
 	for i in xrange(1, excel_sheet.nrows):
 		row = excel_sheet.row_values(i)
 		member = Member(
-			empno = row[3],
+			empid = row[3],
 			name = row[2],
 			company = row[4],
 			title = row[5],
@@ -73,37 +73,6 @@ def import_members(excel_sheet):
 		member.save(using='slot')
 
 
-def list_members(request):
-	try:
-		rotation = Master.objects.get(pk="201007")
-	except Master.DoesNotExist:
-		rotation = Master()
-	members = Member.objects.filter(rotation="201007")
-	t = loader.get_template("members.html")
-	c = Context({
-		"rotation": rotation,
-		"members": members,
-	})
-	c.update(csrf(request))
-	return HttpResponse(t.render(c))
-
-
-def prepare_rotation(request):
-	today = date.today()
-	next_month = today + relativedelta(months=+1)
-
-def test_here(request):
-	today = Master.next()
-	if today:
-		print today
-	else:
-		print "NULL"
-	t = loader.get_template("test_here.html")
-	c = Context({
-	})
-	return HttpResponse(t.render(c))
-
-
 #http://www.numbergrinder.com/node/19
 def create_lesson(request):
 	today = date.today()
@@ -111,7 +80,7 @@ def create_lesson(request):
 	sheet = book.sheet_by_index(0)
 
 	rotation = Master(rotation="201007", creation_date=today)
-	import_members(rotation, sheet)
+	rebuild_members(rotation, sheet)
 
 	t = loader.get_template("members.html")
 

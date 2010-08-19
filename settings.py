@@ -25,10 +25,6 @@ DATABASES = {
 	'slot': {
 		'ENGINE': 'django.db.backends.sqlite3', 
 		'NAME': ROTATIONAL_DATABASE, 
-		'USER': '',
-		'PASSWORD': '', 
-		'HOST': '', 
-		'PORT': '',
 	}
 }
 

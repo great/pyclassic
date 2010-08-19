@@ -4,32 +4,26 @@
 </head>
 <body>
 <h1>회원 명부 관리</h1>
-<form name="member" enctype="multipart/form-data" action="/manage/import" method="post">{% csrf_token %}
-	<input type="file" name="excel" size="100" />
-	<input type="submit" value="import excel" />
-</form>
 
 {% if members %}
-<h3>기준일: {{rotation.creation_date}}</h3>
-
     <table>
 		<tr>
 			<th>사번</th>
+			<th>레슨악기</th>
+			<th>강사</th>
 			<th>이름</th>
-			<th>소속</th>
-			<th>호칭</th>
-			<th>가입일</th>
-			<th>운영진</th>
-			<th>email</th>
-			<th>핸드폰번호</th>
 			<th>소속부서</th>
-			<th>레슨신청수</th>
+			<th>기본</th>
+			<th>운영</th>
+			<th>연주</th>
+			<th>계</th>
+			<th>신청수</th>
 		</tr>
     {% for member in members %}
 		<tr>
-			<td>{{member.empno}}</td>
+			<td>{{member.empid}}</td>
+			<td>{{member.teacher}}</td>
 			<td>{{member.name}}</td>
-			<td>{{member.company}}</td>
 			<td>{{member.title}}</td>
 			<td>{{member.join_date}}</td>
 			<td>{{member.club_role}}</td>
@@ -43,6 +37,5 @@
 {% else %}
     <p>No members yet.</p>
 {% endif %}
-
 </body>
 </html>

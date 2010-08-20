@@ -5,25 +5,47 @@ from classic.lesson.models import Lesson, Teacher, LessonClass
 from django.template import Context, loader
 from datetime import date
 
-import os
 
-APP_BASE = os.environ["HOME"] + "/com.nhn.club"
-
+# for reduce() expression:
+# http://stackoverflow.com/questions/952914/making-a-flat-list-out-of-list-of-lists-in-python
+# OR, http://docs.python.org/library/functions.html#reduce
 def classes(request):
-	lessons = Lesson.objects.filter(active=True)
-	teachers = {}
-	for lesson in lessons:
-		teachers[lesson] = list(Teacher.objects.filter(lesson=lesson.id))
-	clss_map = {}
-	# http://stackoverflow.com/questions/952914/making-a-flat-list-out-of-list-of-lists-in-python
-	# OR, http://docs.python.org/library/functions.html#reduce
-	for teacher in reduce(lambda x,y: x+y,teachers.values()):
-		clss_map[teacher] = LessonClass.objects.filter(teacher=teacher.id)
+#	lesson_map = {}
+#	for lesson in Lesson.objects.filter(active=True):
+#		teachers = list(Teacher.objects.filter(lesson=lesson.id))
+#		if teachers: lesson_map[lesson] = teachers
+
+#	teacher_map = {}
+#	for teacher in reduce(lambda x,y: x+y,lesson_map.values()):
+#		members = list(LessonClass.objects.filter(teacher=teacher.id))
+#		if members: teacher_map[teacher] = members
+
+
+
+	lesson_teacher = {}
+	teacher_student = {}
+	for teacher in Teacher.objects.all():
+		if not teacher.students(): continue
+		lesson = teacher.lesson
+		if lesson_teacher.has_key(lesson): lesson_teacher[lesson].append(teacher)
+		else: lesson_teacher[lesson] = [teacher]
+		teacher_student[teacher] = list(LessonClass.objects.filter(teacher=teacher.id))
+
+
+
+	mapping = {}
+	for teacher in Teacher.objects.all():
+		if not teacher.students(): continue
+		lesson = teacher.lesson
+		students = list(LessonClass.objects.filter(teacher=teacher.id))
+		if mapping.has_key(lesson): mapping[lesson][teacher] = students
+		else: mapping[lesson] = {teacher: students}
+
 	t = loader.get_template("lesson_classes.html")
 	c = Context({
-		"lessons": lessons,
-		"teachers": teachers,
-		"clss_map": clss_map,
+		"lesson_teacher": lesson_teacher,
+		"teacher_student": teacher_student,
+		"mapping": mapping,
 		"classes": LessonClass.objects.all().order_by('teacher', 'name'),
 	})
 	return HttpResponse(t.render(c))

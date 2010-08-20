@@ -11,6 +11,7 @@ class Master():
 
 	def __init__(self):
 		self.catalog = glob.glob(DATABASE + '.*')
+		self.catalog.sort()
 
 	def archive(self):
 		key = self.nextkey()

@@ -12,7 +12,7 @@
 
 <h3>database archived</h3>
 <ul>
-{% for master in masters %}
+{% for master in masters reversed %}
 	<li>{{master}}</li>
 {% empty %}
 	<li>No lesson rotations.</li>

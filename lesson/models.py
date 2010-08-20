@@ -15,6 +15,12 @@ class Lesson(models.Model):
 	def teachers(self):
 		return len(Teacher.objects.filter(lesson=self.id).filter(active=True))
 
+	def students(self):
+		teachers = Teacher.objects.filter(lesson=self.id).filter(active=True)
+		students = 0
+		for teacher in teachers: students += teacher.students()
+		return students
+
 
 class Teacher(models.Model):
 	name		= models.CharField("이름", max_length=50)

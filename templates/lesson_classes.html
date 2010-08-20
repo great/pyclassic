@@ -12,11 +12,23 @@
 	<div id="content-main"> 
 
 <form name="clss" method="post">
-<table>
+<table class="docutils">
+	<colgroup> 
+		<col width="16%" /> 
+		<col width="8%" /> 
+		<col width="8%" /> 
+		<col width="8%" /> 
+		<col width="20%" /> 
+		<col width="4%" /> 
+		<col width="4%" /> 
+		<col width="4%" /> 
+		<col width="4%" /> 
+		<col width="4%" /> 
+	</colgroup> 
 	<tr>
-		<th>사번</th>
-		<th>레슨악기</th>
+		<th class="head">레슨악기</th>
 		<th>강사</th>
+		<th>사번</th>
 		<th>이름</th>
 		<th>소속부서</th>
 		<th>기본</th>
@@ -25,30 +37,33 @@
 		<th>계</th>
 		<th>신청수</th>
 	</tr>
-{% for clss in classes %}
+{% for lesson, teachers in mapping.items %}
 	<tr>
-		<td>
-			{% if forloop.first %}[]{% endif %}
-			{{clss.empid}}
-		</td>
-		<td>{{clss.teacher.lesson.alias}}</td>
-		<td>{{clss.teacher.name}}</td>
-		<td>{{clss.name}}</td>
-		<td>{{clss.department}}</td>
-		<td>{{clss.base}}</td>
-		<td>{{clss.operational}}</td>
-		<td>{{clss.performance}}</td>
-		<td>{{clss.net}}</td>
-		<td>{{clss.applies}}</td>
+		<td rowspan="{{lesson.students}}">{{lesson.name}}</td>
+		{% for teacher, students in teachers.items %}
+			{% if not forloop.first %}</tr><tr>{% endif %}
+			<td rowspan="{{teacher.students}}">{{teacher.name}}</td>
+			{% for student in students %}
+				{% if not forloop.first %}</tr><tr>{% endif %}
+				<td>{{student.empid}}</td>
+				<td>{{student.name}}</td>
+				<td>{{student.department}}</td>
+				<td>{{student.base}}</td>
+				<td>{{student.operational}}</td>
+				<td>{{student.performance}}</td>
+				<td>{{student.net}}</td>
+				<td>{{student.applies}}</td>
+			{% endfor %}
+		{% endfor %}
 	</tr>
 {% empty %}
 	<tr>
 	    <td colspan="10">No members yet.</td>
 	</tr>
 	<tr>
-		<td><input type="text" name="empid" /></td>
 		<td>...</td>
 		<td><input type="text" name="teacher" /></td>
+		<td><input type="text" name="empid" /></td>
 		<td><input type="text" name="name" /></td>
 		<td><input type="text" name="department" /></td>
 		<td><input type="text" name="base" /></td>
@@ -61,61 +76,6 @@
 </table>
 </form>
 
-<ol>
-{% for lesson, teachers in lesson_teacher.items %}
-	<li>
-		{{lesson.name}} / T:{{lesson.teachers}}
-		<ol>
-		{% for teacher in teachers %}
-			<li>
-				{{teacher.name}} / S:{{teacher.students}}
-				<ol>
-				{% for student in teacher_student.teacher %}
-					<li>{{student.name}}</li>
-				{% endfor %}
-				</ol>
-			</li>
-		{% endfor %}
-		</ol>
-	</li>
-{% endfor %}
-</ol>
-
-This is the final
-<ol>
-{% for lesson, teachers in mapping.items %}
-	<li>
-		{{lesson.name}} / T:{{lesson.teachers}}
-		<ol>
-		{% for teacher, students in teachers.items %}
-			<li>
-				{{teacher.name}} / S:{{teacher.students}}
-				<ol>
-				{% for student in students %}
-					<li>{{student.name}}</li>
-				{% endfor %}
-				</ol>
-			</li>
-		{% endfor %}
-		</ol>
-	</li>
-{% endfor %}
-</ol>
-//This is the final
-
-<ol>
-{% for teacher, students in teacher_student.items %}
-	<li>
-		{{teacher.name}}
-		<ol>
-			{% for student in students %}
-				<li>{{ student.name }}</li>
-			{% endfor %}
-		</ol>
-	</li>
-{% endfor %}
-</ol>
-xxx
 </div>
 </div>
 </body>

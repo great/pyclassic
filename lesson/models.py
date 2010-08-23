@@ -73,6 +73,16 @@ class Performer(models.Model):
 
 
 class Operator(models.Model):
+	OPERATOR_CHOICES = (
+		('CLUB_CHIEF', '동호회 회장'),
+		('ACCOUNT_MANAGER', '회계'),
+		('LESSON_MANAGER', '레슨관리'),
+		('MEETING_MANAGER', '정모담당'),
+		('LESSON_CHIEF', '레슨대표'),
+	)
 	empid	= models.ForeignKey(Member)
+	item	= models.CharField(max_length=50, choices=OPERATOR_CHOICES)
 	desc	= models.CharField("내용", max_length=100)
+	amount	= models.IntegerField('금액')
+
 

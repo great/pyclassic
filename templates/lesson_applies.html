@@ -1,0 +1,109 @@
+<html>
+<head>
+	<title>nhn classical music club lesson fee management app</title>
+	<link rel="stylesheet" type="text/css" href="/media/css/base.css" />
+	<script type="text/javascript" src="/resources/extjs/adapter/ext/ext-base.js"></script>
+	<script type="text/javascript" src="/resources/extjs/ext-all.js"></script>
+	<script type="text/javascript" src="/resources/extjs/examples/ux/TableGrid.js"></script>
+	<script type="text/javascript" src="/resources/connector/js/Ext.ux.DateTime.js"></script>
+	<script type="text/javascript" src="/resources/connector/js/Ext.ux.AutoEditableGrid.js"></script>
+	<script type="text/javascript" src="/resources/connector/js/Ext.ux.DynamicGridPanel.js"></script>
+	<script type="text/javascript" src="/resources/connector/js/Ext.ux.AutoGridPanel.js"></script>
+	<script type="text/javascript" src="/resources/connector/js/Ext.ux.AutoGrid.js"></script>
+	<script type="text/javascript" src="/resources/connector/js/Ext.ux.DjangoForms.js"></script>
+	<link rel="stylesheet" type="text/css" href="/resources/extjs/resources/css/ext-all.css" /> 
+	<link rel="stylesheet" type="text/css" href="/resources/connector/css/genericforms.css" />
+</head>
+<body>
+<body class="change-list">
+	<div id="container">
+		<div id="header">
+			<div id="branding">
+				<h1>Lesson Arrangement: {{lesson.name}}</h1>
+			</div>
+		</div>
+
+		<div id="content" class="flex">
+			<form name="clss" method="post">
+				<h3>::{{teacher.name}}::</h3>
+				<!--table id="result_list" class="docutils"-->
+				<table id="result_list" width="50%">
+				{% for teacher, students in mapping.items %}
+					<thead>
+						<!--
+						<tr>
+							<th colspan="7"><h3>::{{teacher.name}}::</h3></th>
+						</tr>
+						-->
+						<tr>
+							<th>사번</th>
+							<th>이름</th>
+							<th>소속부서</th>
+							<th>기본</th>
+							<th>운영</th>
+							<th>연주</th>
+							<th>계</th>
+						</tr>
+					</thead>
+					{% for student in students %}
+					<tbody>
+						<tr class="{% cycle 'row1' 'row2' %}">
+							<td>
+								{% if not student.is_member %}<span style="color:red">{{student.empid}}</span>{% else %}{{student.empid}}{% endif %}
+							</td>
+							<td>{{student.name}}</td>
+							<td>{{student.department}}</td>
+							<td>{{student.base}}</td>
+							<td>{{student.operational}}</td>
+							<td>{{student.performance}}</td>
+							<td>{{student.net}}</td>
+						</tr>
+						{% empty %}
+						<tr>
+							<td colspan="7">No applies yet.</td>
+						</tr>
+						<tr>
+							<td><input type="text" name="empid" /></td>
+							<td><input type="text" name="name" /></td>
+							<td><input type="text" name="department" /></td>
+							<td><input type="text" name="base" /></td>
+							<td><input type="text" name="operational" /></td>
+							<td><input type="text" name="performance" /></td>
+							<td>0</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+					{% endfor %}
+				</table>
+			</form>
+		</div>
+	</div>
+<script type="text/javascript">
+var grid = new Ext.ux.grid.TableGrid("result_list", {
+    stripeRows: true // stripe alternate rows
+});
+grid.render();
+
+/*
+var users_grid = new Ext.ux.AutoGrid({
+	autoWidth:true
+	,showBbar:true
+	,loadMask:true
+	,store:new Ext.data.JsonStore({
+		autoLoad:true
+		,remoteSort:true
+		,proxy:new Ext.data.HttpProxy({
+			url:'/test'
+			,method:'POST'
+		})
+	})
+});
+
+var w = new Ext.Window({
+	title:'autogrid !'
+	,items:users_grid
+}).show();
+*/
+</script>
+</body>
+</html>

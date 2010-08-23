@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.core.context_processors import csrf
 from classic.settings import *
 from classic.master.models import Member
@@ -11,7 +11,6 @@ from subprocess import *
 
 import os
 import xlrd
-import pickle
 
 def main(request):
 	today = date.today()
@@ -35,7 +34,7 @@ def create_master(request):
 	book = xlrd.open_workbook(file_contents=request.FILES["excel"].read(), encoding_override="cp949")
 	sheet = book.sheet_by_index(0)
 	rebuild_members(sheet)
-	return main(request)
+	return HttpResponseRedirect('/manage')
 
 
 #http://docs.djangoproject.com/en/dev/topics/db/multi-db/#manually-selecting-a-database

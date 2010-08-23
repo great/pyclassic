@@ -18,8 +18,12 @@ urlpatterns = patterns('',
 	(r'^manage/create$', 'classic.master.views.create_master'),
 	#	(r'^master/arrange$', 'classic.master.views.arrange_lesson'),
 	(r'^lesson/teachers$', 'classic.lesson.views.teachers'),
-	(r'^lesson/classes$', 'classic.lesson.views.classes'),
+	(r'^lesson/full_sheet$', 'classic.lesson.views.lesson_full_sheet'),
+	(r'^lesson/(\d+)$', 'classic.lesson.views.lesson_applies'),
+	(r'^lesson/(\d+)/(\d+)$', 'classic.lesson.views.lesson_applies'),
 	(r'^test$', 'classic.lesson.views.test'),
+	(r'^ex$', 'classic.lesson.views.example'),
+	(r'^extjs$', 'classic.extjs.example_views'),
 	(r'^resources/(?P<path>.*)$', 'django.views.static.serve', {'document_root': APP_BASE + '/classic/resources'}),
 
 )

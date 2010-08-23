@@ -1,82 +1,89 @@
 <html>
 <head>
 	<title>nhn classical music club lesson fee management app</title>
-	<link href="/resources/base.css" rel="stylesheet" type="text/css" media="screen" /> </head>
+	<link rel="stylesheet" type="text/css" href="/media/css/base.css" />
+	<!-- link href="/resources/base.css" rel="stylesheet" type="text/css" media="screen" / -->
 </head>
-<body>
-<div id="billboard"> 
-	<h1>Lesson Apply Management</h1>
-</div> 
+<body class="change-list">
+	<div id="container">
+		<div id="header">
+			<div id="branding">
+				<h1>Lesson Apply Management</h1>
+			</div>
+		</div>
 
-<div id="columnwrap"> 
-	<div id="content-main"> 
-
-<form name="clss" method="post">
-<table class="docutils">
-	<colgroup> 
-		<col width="16%" /> 
-		<col width="8%" /> 
-		<col width="8%" /> 
-		<col width="8%" /> 
-		<col width="20%" /> 
-		<col width="4%" /> 
-		<col width="4%" /> 
-		<col width="4%" /> 
-		<col width="4%" /> 
-		<col width="4%" /> 
-	</colgroup> 
-	<tr>
-		<th class="head">레슨악기</th>
-		<th>강사</th>
-		<th>사번</th>
-		<th>이름</th>
-		<th>소속부서</th>
-		<th>기본</th>
-		<th>운영</th>
-		<th>연주</th>
-		<th>계</th>
-		<th>신청수</th>
-	</tr>
-{% for lesson, teachers in mapping.items %}
-	<tr>
-		<td rowspan="{{lesson.students}}">{{lesson.name}}</td>
-		{% for teacher, students in teachers.items %}
-			{% if not forloop.first %}</tr><tr>{% endif %}
-			<td rowspan="{{teacher.students}}">{{teacher.name}}</td>
-			{% for student in students %}
-				{% if not forloop.first %}</tr><tr>{% endif %}
-				<td>{{student.empid}}</td>
-				<td>{{student.name}}</td>
-				<td>{{student.department}}</td>
-				<td>{{student.base}}</td>
-				<td>{{student.operational}}</td>
-				<td>{{student.performance}}</td>
-				<td>{{student.net}}</td>
-				<td>{{student.applies}}</td>
-			{% endfor %}
-		{% endfor %}
-	</tr>
-{% empty %}
-	<tr>
-	    <td colspan="10">No members yet.</td>
-	</tr>
-	<tr>
-		<td>...</td>
-		<td><input type="text" name="teacher" /></td>
-		<td><input type="text" name="empid" /></td>
-		<td><input type="text" name="name" /></td>
-		<td><input type="text" name="department" /></td>
-		<td><input type="text" name="base" /></td>
-		<td><input type="text" name="operational" /></td>
-		<td><input type="text" name="performance" /></td>
-		<td>0</td>
-		<td>0</td>
-	</tr>
-{% endfor %}
-</table>
-</form>
-
-</div>
-</div>
+		<div id="content" class="flex">
+			<form name="clss" method="post">
+				<table id="result_list" class="docutils">
+					<colgroup>
+						<col width="14%" />
+						<col width="10%" />
+						<col width="8%" />
+						<col width="8%" />
+						<col width="20%" />
+						<col width="4%" />
+						<col width="4%" />
+						<col width="4%" />
+						<col width="4%" />
+						<col width="4%" />
+					</colgroup>
+					<thead>
+						<tr>
+							<th class="head">레슨악기</th>
+							<th>강사</th>
+							<th>사번</th>
+							<th>이름</th>
+							<th>소속부서</th>
+							<th>기본</th>
+							<th>운영</th>
+							<th>연주</th>
+							<th>계</th>
+							<th>중복</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for lesson, teachers in mapping.items %}
+						<tr>
+							<th rowspan="{{lesson.students}}"><a href="/lesson/{{lesson.id}}">{{lesson.name}}</a></th>
+							{% for teacher, students in teachers.items %}
+								{% if not forloop.first %}</tr><tr>{% endif %}
+								<th rowspan="{{teacher.students}}"><a href="/lesson/{{lesson.id}}/{{teacher.id}}">{{teacher.name}}</a></th>
+								{% for student in students %}
+									{% if not forloop.first %}</tr><tr>{% endif %}
+									<td class="{% cycle 'row1' 'row2' %}">
+										{% if not student.is_member %}<span style="color:red">{{student.empid}}</span>{% else %}{{student.empid}}{% endif %}
+									</td>
+									<td class="{% cycle 'row1' 'row2' %}">{{student.name}}</td>
+									<td class="{% cycle 'row1' 'row2' %}">{{student.department}}</td>
+									<td class="{% cycle 'row1' 'row2' %}">{{student.base}}</td>
+									<td class="{% cycle 'row1' 'row2' %}">{{student.operational}}</td>
+									<td class="{% cycle 'row1' 'row2' %}">{{student.performance}}</td>
+									<td class="{% cycle 'row1' 'row2' %}">{{student.net}}</td>
+									<td class="{% cycle 'row1' 'row2' %}">{% if student.applies > 1 %}<span style="color:red">*</span>{% endif %}</td>
+								{% endfor %}
+							{% endfor %}
+						</tr>
+						{% empty %}
+						<tr>
+							<td colspan="10">No members yet.</td>
+						</tr>
+						<tr>
+							<td>...</td>
+							<td><input type="text" name="teacher" /></td>
+							<td><input type="text" name="empid" /></td>
+							<td><input type="text" name="name" /></td>
+							<td><input type="text" name="department" /></td>
+							<td><input type="text" name="base" /></td>
+							<td><input type="text" name="operational" /></td>
+							<td><input type="text" name="performance" /></td>
+							<td>0</td>
+							<td>0</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</form>
+		</div>
+	</div>
 </body>
 </html>

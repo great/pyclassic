@@ -4,9 +4,10 @@ from classic.master.models import Master
 from classic.lesson.models import Lesson, Teacher, LessonClass
 from django.template import Context, loader
 from datetime import date
+from classic.extjs import grids, utils
 
 
-def classes(request):
+def lesson_full_sheet(request):
 	mapping = {}
 	for teacher in Teacher.objects.all():
 		if not teacher.students(): continue
@@ -17,6 +18,20 @@ def classes(request):
 
 	t = loader.get_template("lesson_classes.html")
 	c = Context({
+		"mapping": mapping,
+	})
+	return HttpResponse(t.render(c))
+
+def lesson_applies(request, lesson_id, teacher_id=None):
+	teachers = Teacher.objects.filter(lesson=lesson_id)
+	if (teacher_id): teachers = teachers.filter(pk=teacher_id)
+
+	mapping = {}
+	for teacher in teachers: mapping[teacher] = LessonClass.objects.filter(teacher=teacher.id)
+
+	t = loader.get_template("lesson_applies.html")
+	c = Context({
+		"lesson": Lesson.objects.get(pk=lesson_id),
 		"mapping": mapping,
 	})
 	return HttpResponse(t.render(c))
@@ -39,9 +54,15 @@ def teachers(request):
 	return HttpResponse(t.render(c))
 
 
-def test(request):
+def plain_python(request):
 	c = Context({
 		"listing": ['a', 'b', 'c', 'd'],
 	})
 	t = loader.get_template("testing.html")
 	return HttpResponse(t.render(c))
+
+def test(request):
+	grid = grids.ModelGrid(LessonClass)
+	students = LessonClass.objects.all()
+	json = grid.to_grid(students, limit=100)
+	return utils.JsonResponse(json)

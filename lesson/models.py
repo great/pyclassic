@@ -7,6 +7,7 @@ from dateutil.relativedelta import *
 class Lesson(models.Model):
 	name	= models.CharField("Lesson", max_length=50)
 	alias	= models.CharField("레슨명", max_length=50)
+	#staff	= models.ForeignKey("대표", Member, blank=True)
 	active	= models.BooleanField(default=True)
 
 	def __unicode__(self):
@@ -14,6 +15,16 @@ class Lesson(models.Model):
 
 	def teachers(self):
 		return len(Teacher.objects.filter(lesson=self.id).filter(active=True))
+
+	def has_teachers(self):
+		return bool(self.teachers())
+
+	def safe_rowspan(self):
+		counts = len(Teacher.objects.filter(lesson=self.id).filter(active=True))
+		if counts > 0:
+			return counts
+		else:
+			return 1
 
 	def students(self):
 		teachers = Teacher.objects.filter(lesson=self.id).filter(active=True)

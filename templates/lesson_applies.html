@@ -25,16 +25,12 @@
 
 		<div id="content" class="flex">
 			<form name="clss" method="post">
-				<h3>::{{teacher.name}}::</h3>
 				<!--table id="result_list" class="docutils"-->
-				<table id="result_list" width="50%">
-				{% for teacher, students in mapping.items %}
+				{% for teacher, students in datasource.items %}
+				<div>
+				<h2>::{{teacher.name}}::</h2>
+				<table id="lesson{{teacher.id}}" width="50%">
 					<thead>
-						<!--
-						<tr>
-							<th colspan="7"><h3>::{{teacher.name}}::</h3></th>
-						</tr>
-						-->
 						<tr>
 							<th>사번</th>
 							<th>이름</th>
@@ -73,18 +69,21 @@
 						</tr>
 						{% endfor %}
 					</tbody>
-					{% endfor %}
 				</table>
+				<script type="text/javascript">
+				var grid = new Ext.ux.grid.TableGrid("lesson{{teacher.id}}", {
+    				stripeRows: true // stripe alternate rows
+				});
+				grid.render();
+				</script>
+				</div>
+				{% endfor %}
 			</form>
 		</div>
 	</div>
 <script type="text/javascript">
-var grid = new Ext.ux.grid.TableGrid("result_list", {
-    stripeRows: true // stripe alternate rows
-});
-grid.render();
-
 /*
+
 var users_grid = new Ext.ux.AutoGrid({
 	autoWidth:true
 	,showBbar:true
@@ -100,7 +99,7 @@ var users_grid = new Ext.ux.AutoGrid({
 });
 
 var w = new Ext.Window({
-	title:'autogrid !'
+	title:'nhn classic lesson'
 	,items:users_grid
 }).show();
 */

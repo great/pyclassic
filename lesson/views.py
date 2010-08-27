@@ -2,12 +2,13 @@
 from django.http import HttpResponse
 from classic.master.models import Master
 from classic.lesson.models import Lesson, Teacher, LessonClass
+#from classic.lesson.forms import LessonClassForm
 from django.template import Context, loader
 from datetime import date
 from classic.extjs import grids, utils
 
 
-def lesson_full_sheet(request):
+def lesson_dashboard(request):
 	mapping = {}
 	for teacher in Teacher.objects.all():
 		if not teacher.students(): continue
@@ -16,7 +17,7 @@ def lesson_full_sheet(request):
 		if mapping.has_key(lesson): mapping[lesson][teacher] = students
 		else: mapping[lesson] = {teacher: students}
 
-	t = loader.get_template("lesson_classes.html")
+	t = loader.get_template("lesson_dashboard.html")
 	c = Context({
 		"mapping": mapping,
 	})
@@ -26,13 +27,25 @@ def lesson_applies(request, lesson_id, teacher_id=None):
 	teachers = Teacher.objects.filter(lesson=lesson_id)
 	if (teacher_id): teachers = teachers.filter(pk=teacher_id)
 
-	mapping = {}
-	for teacher in teachers: mapping[teacher] = LessonClass.objects.filter(teacher=teacher.id)
+	datasource = {}
+	for teacher in teachers:
+		datasource[teacher] = LessonClass.objects.filter(teacher=teacher.id)
 
 	t = loader.get_template("lesson_applies.html")
 	c = Context({
 		"lesson": Lesson.objects.get(pk=lesson_id),
-		"mapping": mapping,
+		"datasource": datasource,
+	})
+	return HttpResponse(t.render(c))
+
+
+def lessons(request):
+	lessons = Lesson.objects.all()
+	datasource = {}
+	for lesson in lessons: datasource[lesson] = Teacher.objects.filter(lesson=lesson.id)
+	t = loader.get_template("lessons.html")
+	c = Context({
+		"datasource": datasource,
 	})
 	return HttpResponse(t.render(c))
 
@@ -66,3 +79,18 @@ def test(request):
 	students = LessonClass.objects.all()
 	json = grid.to_grid(students, limit=100)
 	return utils.JsonResponse(json)
+
+def contact(request):
+	if request.method == 'POST': # If the form has been submitted...
+		form = ContactForm(request.POST) # A form bound to the POST data
+		if form.is_valid(): # All validation rules pass
+			# Process the data in form.cleaned_data
+			# ...
+			return HttpResponseRedirect('/thanks/') # Redirect after POST
+	else:
+		form = ContactForm() # An unbound form
+
+	return render_to_response('contact.html', {
+		'form': form,
+	})
+

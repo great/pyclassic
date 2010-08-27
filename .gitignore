@@ -1,3 +1,5 @@
 *.pyc
 data_store
 resources/extjs
+resources/js
+resources/jquery

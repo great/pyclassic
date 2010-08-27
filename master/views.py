@@ -30,21 +30,23 @@ def main(request):
 def create_master(request):
 	today = date.today()
 	master = Master()
-	master.archive()
+	nextkey = master.archive()
 	book = xlrd.open_workbook(file_contents=request.FILES["excel"].read(), encoding_override="cp949")
 	sheet = book.sheet_by_index(0)
-	rebuild_members(sheet)
+	rebuild_members(sheet, nextkey)
 	return HttpResponseRedirect('/manage')
 
 
-#http://docs.djangoproject.com/en/dev/topics/db/multi-db/#manually-selecting-a-database
-def rebuild_members(excel_sheet):
+# http://docs.djangoproject.com/en/dev/topics/db/multi-db/#manually-selecting-a-database
+def rebuild_members(excel_sheet, nextkey):
 	Member.objects.all().delete()
 	for i in xrange(1, excel_sheet.nrows):
 		row = excel_sheet.row_values(i)
 		member = Member.build(row)
 		member.save()
-
+	for nomember in Member.objects.using(DATABASE + '.' + nextkey).filter(club_role='비회원'):
+		if not Member.objects.filter(pk=nomember.id):
+			nomember.using(DATABASE).save()
 
 #http://www.numbergrinder.com/node/19
 #Pulling data from Excel using Python, xlrd

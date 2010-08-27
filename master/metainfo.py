@@ -18,6 +18,7 @@ class Master():
 		target = DATABASE + '.' + key
 		Popen(['cp', DATABASE, target])
 		self.catalog.append(target)
+		return key
 
 	def read(self):
 		return tuple(self.catalog)

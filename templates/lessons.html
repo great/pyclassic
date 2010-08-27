@@ -16,10 +16,15 @@
 			<table id="result_list" class="docutils">
 				<thead>
 					<tr>
-						<th rowspan="2" class="head">레슨악기</th>
-						<th colspan="3">강사</th>
+						<th rowspan="2" class="head">레슨</th>
+						<th colspan="3" class="head">레슨대표</th>
+						<th rowspan="2" class="head">비고</th>
+						<th colspan="3" class="head">강사</th>
 					</tr>
 					<tr>
+						<th>이름</th>
+						<th>핸드폰</th>
+						<th>email</th>
 						<th>이름</th>
 						<th>핸드폰</th>
 						<th>email</th>
@@ -29,6 +34,10 @@
 					{% for lesson, teachers in datasource.items %}
 					<tr>
 						<th rowspan="{{lesson.safe_rowspan}}">{{lesson.alias}}</th>
+						<th rowspan="{{lesson.safe_rowspan}}">{{lesson.staff.name}}</th>
+						<th rowspan="{{lesson.safe_rowspan}}">{{lesson.staff.cellular}}</th>
+						<th rowspan="{{lesson.safe_rowspan}}">{{lesson.staff.email}}</th>
+						<th rowspan="{{lesson.safe_rowspan}}">{{lesson.desc}}</th>
 						{% for teacher in teachers %}
 							{% if not forloop.first %}</tr><tr>{% endif %}
 							<th>{{teacher.name}}</th>
@@ -40,7 +49,7 @@
 					</tr>
 					{% empty %}
 					<tr>
-						<td colspan="4">No lessons.<br />Contact to club leader.</td>
+						<td colspan="7">No lessons.<br />Contact to club leader.</td>
 					</tr>
 					{% endfor %}
 				</tbody>

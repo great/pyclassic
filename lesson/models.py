@@ -7,7 +7,8 @@ from dateutil.relativedelta import *
 class Lesson(models.Model):
 	name	= models.CharField("Lesson", max_length=50)
 	alias	= models.CharField("레슨명", max_length=50)
-	#staff	= models.ForeignKey("대표", Member, blank=True)
+	staff	= models.ForeignKey(Member, blank=True)
+	desc	= models.TextField("설명", blank=True)
 	active	= models.BooleanField(default=True)
 
 	def __unicode__(self):
@@ -44,14 +45,12 @@ class Teacher(models.Model):
 		return self.name
 
 	def students(self):
-		return len(LessonClass.objects.filter(teacher=self.id))
+		return len(Student.objects.filter(teacher=self.id))
 
 
-class LessonClass(models.Model):
-	empid		= models.CharField("사번", max_length=7)
+class Student(models.Model):
+	empid		= models.ForeignKey(Member)
 	teacher		= models.ForeignKey(Teacher)
-	name		= models.CharField("이름", max_length=50)
-	department	= models.CharField("소속부서", blank=True, max_length=50)
 	base		= models.IntegerField("기본", default=0)
 	operational	= models.IntegerField("운영", default=0)
 	performance	= models.IntegerField("연주", default=0)
@@ -60,10 +59,10 @@ class LessonClass(models.Model):
 		return self.base + self.operational + self.performance
 
 	def is_member(self):
-		return bool(Member.objects.filter(pk=self.empid))
+		return self.empid.is_member()
 
 	def applies(self):
-		return len(LessonClass.objects.filter(empid=self.empid))
+		return len(self.objects.filter(empid=self.empid))
 
 
 class Expense(models.Model):

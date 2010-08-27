@@ -53,8 +53,8 @@
 									<td class="{% cycle 'row1' 'row2' %}">
 										{% if not student.is_member %}<span style="color:red">{{student.empid}}</span>{% else %}{{student.empid}}{% endif %}
 									</td>
-									<td class="{% cycle 'row1' 'row2' %}">{{student.name}}</td>
-									<td class="{% cycle 'row1' 'row2' %}">{{student.department}}</td>
+									<td class="{% cycle 'row1' 'row2' %}">{{student.empid.name}}</td>
+									<td class="{% cycle 'row1' 'row2' %}">{{student.empid.department}}</td>
 									<td class="{% cycle 'row1' 'row2' %}">{{student.base}}</td>
 									<td class="{% cycle 'row1' 'row2' %}">{{student.operational}}</td>
 									<td class="{% cycle 'row1' 'row2' %}">{{student.performance}}</td>

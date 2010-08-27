@@ -26,12 +26,14 @@ class Master(models.Model):
 
 
 class Member(models.Model):
+	COMPANY_CHOICES = ('NHN Business Corpopration', 'NHN Corporation', 'NHN I&S', '재단법인 해피빈')
+	CLUB_ROLE_CHOICES = ('회장', '감사', '총무', '회원', '비회원')
 	empid			= models.CharField("사번", max_length=7, primary_key=True)
 	name			= models.CharField("이름", max_length=50)
 	company			= models.CharField("소속", blank=True, max_length=50)
 	title			= models.CharField("호칭", blank=True, max_length=20)
-	join_date		= models.CharField("가입일", max_length=10)
-	club_role		= models.CharField("운영진", blank=True, max_length=20)
+	join_date		= models.CharField("가입일", blank=True, max_length=10)
+	club_role		= models.CharField("운영진", max_length=20)
 	email			= models.EmailField(blank=True, max_length=100)
 	cellular		= models.CharField("핸드폰번호", blank=True, max_length=20)
 	department		= models.CharField("소속부서", blank=True, max_length=50)
@@ -39,6 +41,9 @@ class Member(models.Model):
 
 	def __unicode__(self):
 		return self.empid
+
+	def is_member(self):
+		return bool(unicode(u'비회원') != self.club_role)
 
 	@staticmethod
 	def build(excel_row):

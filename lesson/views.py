@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.http import HttpResponse
 from classic.master.models import Master
-from classic.lesson.models import Lesson, Teacher, LessonClass
+from classic.lesson.models import Lesson, Teacher, Student
 #from classic.lesson.forms import LessonClassForm
 from django.template import Context, loader
 from datetime import date
@@ -13,7 +13,7 @@ def lesson_dashboard(request):
 	for teacher in Teacher.objects.all():
 		if not teacher.students(): continue
 		lesson = teacher.lesson
-		students = list(LessonClass.objects.filter(teacher=teacher.id))
+		students = list(Student.objects.filter(teacher=teacher.id))
 		if mapping.has_key(lesson): mapping[lesson][teacher] = students
 		else: mapping[lesson] = {teacher: students}
 
@@ -29,7 +29,7 @@ def lesson_applies(request, lesson_id, teacher_id=None):
 
 	datasource = {}
 	for teacher in teachers:
-		datasource[teacher] = LessonClass.objects.filter(teacher=teacher.id)
+		datasource[teacher] = Student.objects.filter(teacher=teacher.id)
 
 	t = loader.get_template("lesson_applies.html")
 	c = Context({
@@ -53,7 +53,7 @@ def lessons(request):
 def simple_all_classes(request):
 	t = loader.get_template("lesson_classes.html")
 	c = Context({
-		"classes": LessonClass.objects.all().order_by('teacher', 'name'),
+		"classes": Student.objects.all().order_by('teacher', 'name'),
 	})
 	return HttpResponse(t.render(c))
 
@@ -75,8 +75,8 @@ def plain_python(request):
 	return HttpResponse(t.render(c))
 
 def test(request):
-	grid = grids.ModelGrid(LessonClass)
-	students = LessonClass.objects.all()
+	grid = grids.ModelGrid(Student)
+	students = Student.objects.all()
 	json = grid.to_grid(students, limit=100)
 	return utils.JsonResponse(json)
 

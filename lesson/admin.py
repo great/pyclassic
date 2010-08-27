@@ -9,8 +9,8 @@ class TeacherAdmin(admin.ModelAdmin):
 	list_display = ('id', 'name', 'lesson', 'active',)
 	list_filter = ('lesson',)
 
-class LessonClassAdmin(admin.ModelAdmin):
-	list_display = ('empid', 'name', 'department', 'teacher', 'base', 'operational', 'performance')
+class StudentAdmin(admin.ModelAdmin):
+	list_display = ('empid', 'teacher', 'base', 'operational', 'performance')
 	list_filter = ('teacher',)
 
 class ExpenseAdmin(admin.ModelAdmin):
@@ -25,7 +25,7 @@ class OperatorAdmin(admin.ModelAdmin):
 
 admin.site.register(Lesson, LessonAdmin)
 admin.site.register(Teacher, TeacherAdmin)
-admin.site.register(LessonClass, LessonClassAdmin)
+admin.site.register(Student, StudentAdmin)
 admin.site.register(Expense, ExpenseAdmin)
 admin.site.register(Performer, PerformerAdmin)
 admin.site.register(Operator, OperatorAdmin)

@@ -4,12 +4,31 @@ from classic.master.models import Member
 from datetime import date
 from dateutil.relativedelta import *
 
+
 class Lesson(models.Model):
 	name	= models.CharField("Lesson", max_length=50)
 	alias	= models.CharField("레슨명", max_length=50)
-	staff	= models.ForeignKey(Member, blank=True)
+	# pseudo-FK. null enabled(who knows manage it?)
+	manager	= models.CharField("레슨담당자 사번", max_length=7, blank=True)
 	desc	= models.TextField("설명", blank=True)
 	active	= models.BooleanField(default=True)
+
+	# http://markmail.org/message/3v3walw2qpszbi56
+	def __init__(self, *args, **kwargs):
+		super(Lesson, self).__init__(*args, **kwargs) 
+		self.member = None
+
+	def init_member(self):
+		if self.manager and not self.member:
+			self.member = Member.objects.get(pk=self.manager)
+
+	def lesson_manager(self):
+		self.init_member()
+		return self.member
+
+	def has_manager(self):
+		self.init_member()
+		return bool(self.member)
 
 	def __unicode__(self):
 		return self.name
@@ -47,22 +66,46 @@ class Teacher(models.Model):
 	def students(self):
 		return len(Student.objects.filter(teacher=self.id))
 
-
+''' for the practical reason, FK not used:
+when members deleted from Member model, automatically deleted from Student.
+To prevent it, FK should be cut.
+'''
 class Student(models.Model):
-	empid		= models.ForeignKey(Member)
+	# exactly FK
+	empid		= models.CharField("사번", max_length=7)
 	teacher		= models.ForeignKey(Teacher)
 	base		= models.IntegerField("기본", default=0)
 	operational	= models.IntegerField("운영", default=0)
 	performance	= models.IntegerField("연주", default=0)
 
+	def __init__(self, *args, **kwargs):
+		super(Student, self).__init__(*args, **kwargs) 
+		self.member = None
+
+	def init_member(self):
+		if not self.member: self.member = Member.objects.get(pk=self.empid)
+
+	def member(self):
+		self.init_member()
+		return self.member
+
+	def name(self):
+		self.init_member()
+		return self.member.name
+
+	def department(self):
+		self.init_member()
+		return self.member.department
+
 	def net(self):
 		return self.base + self.operational + self.performance
 
 	def is_member(self):
-		return self.empid.is_member()
+		self.init_member()
+		return self.member.is_member()
 
 	def applies(self):
-		return len(self.objects.filter(empid=self.empid))
+		return len(Student.objects.filter(empid=self.empid))
 
 
 class Expense(models.Model):

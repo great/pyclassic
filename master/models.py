@@ -59,3 +59,29 @@ class Member(models.Model):
 		m.department	= excel_row[12]
 		return m
 
+class LegacyMember():
+	def __init__(self, member):
+		self.m = {}
+		self.m['empid'] = member.empid
+		self.m['name'] = member.name
+		self.m['company'] = member.company
+		self.m['title'] = member.title
+		self.m['join_date'] = member.join_date
+		self.m['club_role'] = member.club_role
+		self.m['email'] = member.email
+		self.m['cellular'] = member.cellular
+		self.m['department'] = member.department
+
+	def populate(self):
+		m = Member()
+		m.empid			= self.m['empid']
+		m.name			= self.m['name']
+		m.company		= self.m['company']
+		m.title			= self.m['title']
+		m.join_date		= self.m['join_date']
+		m.club_role		= self.m['club_role']
+		m.email			= self.m['email']
+		m.cellular		= self.m['cellular']
+		m.department	= self.m['department']
+		return m
+		

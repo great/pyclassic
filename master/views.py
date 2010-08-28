@@ -2,7 +2,7 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.context_processors import csrf
 from classic.settings import *
-from classic.master.models import Member
+from classic.master.models import Member, LegacyMember
 from classic.master.metainfo import Master
 from django.template import Context, loader
 from datetime import date
@@ -28,25 +28,31 @@ def main(request):
 
 
 def create_master(request):
-	today = date.today()
-	master = Master()
-	nextkey = master.archive()
+	master = Master().archive()
 	book = xlrd.open_workbook(file_contents=request.FILES["excel"].read(), encoding_override="cp949")
-	sheet = book.sheet_by_index(0)
-	rebuild_members(sheet, nextkey)
+	rebuild_members(book.sheet_by_index(0))
 	return HttpResponseRedirect('/manage')
 
 
+def current_unregistered_members():
+	unregistered_members = []
+	for member in Member.objects.filter(club_role='비회원'):
+		unregistered_members.append(LegacyMember(member))
+	return unregistered_members
+
+
 # http://docs.djangoproject.com/en/dev/topics/db/multi-db/#manually-selecting-a-database
-def rebuild_members(excel_sheet, nextkey):
+def rebuild_members(excel_sheet):
+	unregistered = current_unregistered_members()
 	Member.objects.all().delete()
 	for i in xrange(1, excel_sheet.nrows):
 		row = excel_sheet.row_values(i)
 		member = Member.build(row)
 		member.save()
-	for nomember in Member.objects.using(DATABASE + '.' + nextkey).filter(club_role='비회원'):
-		if not Member.objects.filter(pk=nomember.id):
-			nomember.using(DATABASE).save()
+	for legacy in unregistered:
+		member = legacy.populate()
+		if not Member.objects.filter(pk=member.empid):
+			member.save()
 
 #http://www.numbergrinder.com/node/19
 #Pulling data from Excel using Python, xlrd

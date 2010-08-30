@@ -1,0 +1,458 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<title>Grid with RowEditor Example</title>
+	<link rel="stylesheet" type="text/css" href="/resources/extjs/resources/css/ext-all.css" />
+	<link rel="stylesheet" type="text/css" href="/resources/extjs/examples/grid/grid-examples.css" />
+	<!-- Common Styles for the examples -->
+	<link rel="stylesheet" type="text/css" href="/resources/extjs/examples/shared/examples.css" />
+	<link rel="stylesheet" type="text/css" href="/resources/extjs/examples/ux/css/RowEditor.css" />
+	<script type="text/javascript" src="/resources/extjs/adapter/ext/ext-base.js"></script>
+	<script type="text/javascript" src="/resources/extjs/ext-all.js"></script>
+	<script type="text/javascript" src="/resources/extjs/examples/ux/RowEditor.js"></script>
+	<style type="text/css">
+		.x-grid3 .x-window-ml{
+			padding-left: 0;	
+		} 
+		.x-grid3 .x-window-mr {
+			padding-right: 0;
+		} 
+		.x-grid3 .x-window-tl {
+			padding-left: 0;
+		} 
+		.x-grid3 .x-window-tr {
+			padding-right: 0;
+		} 
+		.x-grid3 .x-window-tc .x-window-header {
+			height: 3px;
+			padding:0;
+			overflow:hidden;
+		} 
+		.x-grid3 .x-window-mc {
+			border-width: 0;
+			background: #cdd9e8;
+		} 
+		.x-grid3 .x-window-bl {
+			padding-left: 0;
+		} 
+		.x-grid3 .x-window-br {
+			padding-right: 0;
+		}
+		.x-grid3 .x-panel-btns {
+			padding:0;
+		}
+		.x-grid3 .x-panel-btns td.x-toolbar-cell {
+			padding:3px 3px 0;
+		}
+		.x-box-inner {
+			zoom:1;
+		}
+		.icon-user-add {
+			background-image: url(../shared/icons/fam/user_add.gif) !important;
+		}
+		.icon-user-delete {
+			background-image: url(../shared/icons/fam/user_delete.gif) !important;
+		}		
+	</style>
+</head>
+<body>
+<script type="text/javascript">
+Ext.onReady(function(){
+	Ext.QuickTips.init();
+
+	var Employee = Ext.data.Record.create([{
+		name: 'name',
+		type: 'string'
+	}, {
+		name: 'email',
+		type: 'string'
+	}, {
+		name: 'start',
+		type: 'date',
+		dateFormat: 'n/j/Y'
+	},{
+		name: 'salary',
+		type: 'float'
+	},{
+		name: 'active',
+		type: 'bool'
+	}]);
+
+
+	// hideous function to generate employee data
+	var genData = function(){
+		var data = [];
+		var s = new Date(2009, 0, 1);
+		var now = new Date(), i = -1;
+		while(s.getTime() < now.getTime()){
+			var ecount = 1;
+			for(var i = 0; i < ecount; i++){
+				var name = 'Intae Kim';
+				data.push({
+					start : s.clearTime(true).add(Date.DAY, 17),
+					name : name,
+					email: name.toLowerCase().replace(' ', '.') + '@exttest.com',
+					active: true,
+					salary: Math.floor(35000/1000)*1000
+				});
+			}
+			s = s.add(Date.MONTH, 1);
+		}
+		return data;
+	}
+
+
+	var store = new Ext.data.GroupingStore({
+		reader: new Ext.data.JsonReader({fields: Employee}),
+		data: genData(),
+		sortInfo: {field: 'name', direction: 'ASC'}
+	});
+
+	var editor = new Ext.ux.grid.RowEditor({
+		saveText: 'Update'
+	});
+
+	var grid = new Ext.grid.GridPanel({
+		store: store,
+		width: 750,
+		region:'center',
+		margins: '0 5 5 5',
+		autoExpandColumn: 'name',
+		plugins: [editor],
+		view: new Ext.grid.GroupingView({
+			markDirty: false
+		}),
+		tbar: [{
+			iconCls: 'icon-user-add',
+			text: 'Add Employee',
+			handler: function(){
+				var e = new Employee({
+					name: 'New Guy',
+					email: 'new@exttest.com',
+					start: (new Date()).clearTime(),
+					salary: 50000,
+					active: true
+				});
+				editor.stopEditing();
+				store.insert(0, e);
+				grid.getView().refresh();
+				grid.getSelectionModel().selectRow(0);
+				editor.startEditing(0);
+			}
+		},{
+			ref: '../removeBtn',
+			iconCls: 'icon-user-delete',
+			text: 'Remove Employee',
+			disabled: true,
+			handler: function(){
+				editor.stopEditing();
+				var s = grid.getSelectionModel().getSelections();
+				for(var i = 0, r; r = s[i]; i++){
+					store.remove(r);
+				}
+			}
+		}],
+
+		columns: [
+		new Ext.grid.RowNumberer(),
+		{
+			id: 'name',
+			header: 'First Name',
+			dataIndex: 'name',
+			width: 220,
+			sortable: true,
+			editor: {
+				xtype: 'textfield',
+				allowBlank: false
+			}
+		},{
+			header: 'Email',
+			dataIndex: 'email',
+			width: 150,
+			sortable: true,
+			editor: {
+				xtype: 'textfield',
+				allowBlank: false,
+				vtype: 'email'
+			}
+		},{
+			xtype: 'datecolumn',
+			header: 'Start Date',
+			dataIndex: 'start',
+			format: 'm/d/Y',
+			width: 100,
+			sortable: true,
+			groupRenderer: Ext.util.Format.dateRenderer('M y'),
+			editor: {
+				xtype: 'datefield',
+				allowBlank: false,
+				minValue: '01/01/2006',
+				minText: 'Can\'t have a start date before the company existed!',
+				maxValue: (new Date()).format('m/d/Y')
+			}
+		},{
+			xtype: 'numbercolumn',
+			header: 'Salary',
+			dataIndex: 'salary',
+			format: '0,0',
+			width: 100,
+			sortable: true,
+			editor: {
+				xtype: 'numberfield',
+				allowBlank: false,
+				minValue: 1,
+				maxValue: 150000
+			}
+		},{
+			xtype: 'booleancolumn',
+			header: 'Active',
+			dataIndex: 'active',
+			align: 'center',
+			width: 50,
+			trueText: 'Yes',
+			falseText: 'No',
+			editor: {
+				xtype: 'checkbox'
+			}
+		}]
+	});
+
+	/*
+	var cstore = new Ext.data.JsonStore({
+		fields:['month', 'employees', 'salary'],
+		data:[],
+		refreshData: function(){
+			var o = {}, data = [];
+			var s = new Date(2007, 0, 1);
+			var now = new Date(), i = -1;
+			while(s.getTime() < now.getTime()){
+				var m = {
+					month: s.format('M y'),
+					employees: 0,
+					salary: 0,
+					index: ++i
+				}
+				data.push(m);
+				o[m.month] = m;
+				s = s.add(Date.MONTH, 1);
+			}
+			store.each(function(r){
+				var m = o[r.data.start.format('M y')];
+				for(var i = m.index, mo; mo = data[i]; i++){
+					mo.employees += 10000;
+					mo.salary += r.data.salary;
+				}
+			});
+			this.loadData(data);
+		}
+	});
+	cstore.refreshData();
+	store.on('add', cstore.refreshData, cstore);
+	store.on('remove', cstore.refreshData, cstore);
+	store.on('update', cstore.refreshData, cstore);
+	*/
+
+	var layout = new Ext.Panel({
+		title: 'Employee Salary by Month',
+		layout: 'border',
+		layoutConfig: {
+			columns: 1
+		},
+		width:750,
+		height: 300,
+		items: [grid]
+	});
+	layout.render(Ext.getBody());
+
+	grid.getSelectionModel().on('selectionchange', function(sm){
+		grid.removeBtn.setDisabled(sm.getCount() < 1);
+	});
+});
+</script>
+
+<script type="text/javascript">
+/*
+var datastore = new Ext.data.JsonStore({
+	autoLoad:true,
+	//proxy:new Ext.data.HttpProxy({ url:'/test', method:'POST' }),
+	url: '/test',
+	storeId: 'students',
+	root: 'rows'
+});
+
+//alert(datastore.getRange(0,15).length);
+*/
+
+var Student = Ext.data.Record.create([
+	{ name: 'empid', type: 'string' },
+	{ name: 'name', type: 'string' },
+	{ name: 'department', type: 'string' },
+	{ name: 'base', type: 'int' },
+	{ name: 'operational', type: 'int' },
+	{ name: 'performance', type: 'int' }
+]);
+
+var genData = function(){
+	var data = [];
+	for(var i = 0; i < 11; i++){
+		data.push({
+			//start : s.clearTime(true).add(Date.DAY, 17),
+			empid: 'KR12224',
+			name : '김인태',
+			department : '카페서비스개발1팀',
+			base : 1,
+			operational: 7,
+			performance: 0
+		});
+	}
+	return data;
+}
+
+Ext.onReady(function(){
+	Ext.QuickTips.init();
+
+	var store = new Ext.data.GroupingStore({
+		reader: new Ext.data.JsonReader({fields: Student}),
+		data: genData(),
+		sortInfo: {field: 'name', direction: 'ASC'}
+	});
+
+	var editor = new Ext.ux.grid.RowEditor({
+		saveText: 'Update'
+	});
+
+	var grid = new Ext.grid.GridPanel({
+		store: store,
+		width: 750,
+		region:'center',
+		margins: '0 5 5 5',
+		//autoExpandColumn: 'name',
+		autoExpandColumn: 'empid',
+		autoExpandMax: 80,
+		plugins: [editor],
+		view: new Ext.grid.GroupingView({
+			markDirty: false
+		}),
+		tbar: [{
+			iconCls: 'icon-user-add',
+			text: 'Add One',
+			handler: function(){
+				var e = new Student({
+					empid: 'KR00000',
+					name: 'New Guy',
+					department: 'New Team',
+					base: 0,
+					operational: 0,
+					performance: 0
+				});
+				editor.stopEditing();
+				store.insert(0, e);
+				grid.getView().refresh();
+				grid.getSelectionModel().selectRow(0);
+				editor.startEditing(0);
+			}
+		},{
+			ref: '../removeBtn',
+			iconCls: 'icon-user-delete',
+			text: 'Remove One',
+			disabled: true,
+			handler: function(){
+				editor.stopEditing();
+				var s = grid.getSelectionModel().getSelections();
+				for(var i = 0, r; r = s[i]; i++){
+					store.remove(r);
+				}
+			}
+		}],
+
+		columns: [
+		new Ext.grid.RowNumberer(),
+		{
+			id: 'empid',
+			header: '사번',
+			dataIndex: 'empid',
+			width: 70,
+			sortable: true,
+			editor: {
+				xtype: 'textfield',
+				allowBlank: false
+			}
+		},{
+			header: '이름',
+			dataIndex: 'name',
+			width: 120,
+			sortable: true,
+			editor: {
+				xtype: 'textfield',
+				allowBlank: false
+			}
+		},{
+			header: '소속부서',
+			dataIndex: 'department',
+			width: 150,
+			sortable: true,
+			editor: {
+				xtype: 'textfield',
+				allowBlank: true
+			}
+		},{
+			xtype: 'numbercolumn',
+			header: '기본',
+			dataIndex: 'base',
+			format: '0,0',
+			width: 50,
+			sortable: true,
+			editor: {
+				xtype: 'numberfield',
+				allowBlank: false,
+				minValue: 0,
+				maxValue: 1000000
+			}
+		},{
+			xtype: 'numbercolumn',
+			header: '운영',
+			dataIndex: 'operational',
+			format: '0,0',
+			width: 50,
+			sortable: true,
+			editor: {
+				xtype: 'numberfield',
+				allowBlank: false,
+				minValue: 0,
+				maxValue: 1000000
+			}
+		},{
+			xtype: 'numbercolumn',
+			header: '연주',
+			dataIndex: 'performance',
+			format: '0,0',
+			width: 50,
+			sortable: true,
+			editor: {
+				xtype: 'numberfield',
+				allowBlank: false,
+				minValue: 0,
+				maxValue: 1000000
+			}
+		}]
+	});
+
+	var layout = new Ext.Panel({
+		title: 'Lesson Attendence',
+		layout: 'border',
+		layoutConfig: {
+			columns: 1
+		},
+		width:'50%',
+		height: 300,
+		items: [grid]
+	});
+	layout.render(Ext.getBody());
+
+	grid.getSelectionModel().on('selectionchange', function(sm){
+		grid.removeBtn.setDisabled(sm.getCount() < 1);
+	});
+});
+</script>
+</body>
+</html>

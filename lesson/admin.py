@@ -3,7 +3,7 @@ from django.contrib import admin
 
 # http://docs.djangoproject.com/en/dev/ref/contrib/admin/
 class LessonAdmin(admin.ModelAdmin):
-	list_display = ('id', 'name', 'alias', 'active',)
+	list_display = ('id', 'name', 'alias', 'desc', 'manager', 'active',)
 
 class TeacherAdmin(admin.ModelAdmin):
 	list_display = ('id', 'name', 'lesson', 'active',)

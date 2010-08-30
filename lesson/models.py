@@ -30,6 +30,27 @@ class Lesson(models.Model):
 		self.init_member()
 		return bool(self.member)
 
+	def manager_name(self):
+		self.init_member()
+		if self.member:
+			return self.member.name
+		else:
+			return ''
+
+	def manager_email(self):
+		self.init_member()
+		if self.member:
+			return self.member.email
+		else:
+			return ''
+
+	def manager_cellular(self):
+		self.init_member()
+		if self.member:
+			return self.member.cellular
+		else:
+			return ''
+
 	def __unicode__(self):
 		return self.name
 

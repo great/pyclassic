@@ -17,8 +17,8 @@
 				<thead>
 					<tr>
 						<th rowspan="2" class="head">레슨</th>
-						<th colspan="3" class="head">레슨대표</th>
 						<th rowspan="2" class="head">비고</th>
+						<th colspan="3" class="head">레슨대표</th>
 						<th colspan="3" class="head">강사</th>
 					</tr>
 					<tr>
@@ -34,10 +34,10 @@
 					{% for lesson, teachers in datasource.items %}
 					<tr>
 						<th rowspan="{{lesson.safe_rowspan}}">{{lesson.alias}}</th>
-						<th rowspan="{{lesson.safe_rowspan}}">{{lesson.staff.name}}</th>
-						<th rowspan="{{lesson.safe_rowspan}}">{{lesson.staff.cellular}}</th>
-						<th rowspan="{{lesson.safe_rowspan}}">{{lesson.staff.email}}</th>
 						<th rowspan="{{lesson.safe_rowspan}}">{{lesson.desc}}</th>
+						<th rowspan="{{lesson.safe_rowspan}}">{{lesson.manager_name}}</th>
+						<th rowspan="{{lesson.safe_rowspan}}">{{lesson.manager_cellular}}</th>
+						<th rowspan="{{lesson.safe_rowspan}}">{{lesson.manager_email}}</th>
 						{% for teacher in teachers %}
 							{% if not forloop.first %}</tr><tr>{% endif %}
 							<th>{{teacher.name}}</th>

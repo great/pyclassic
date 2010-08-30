@@ -58,7 +58,6 @@ def simple_all_classes(request):
 	return HttpResponse(t.render(c))
 
 
-
 def teachers(request):
 	c = Context({
 		"teachers": Teacher.objects.all(),
@@ -78,6 +77,7 @@ def test(request):
 	grid = grids.ModelGrid(Student)
 	students = Student.objects.all()
 	json = grid.to_grid(students, limit=100)
+	print 'test run!!!!!'
 	return utils.JsonResponse(json)
 
 def contact(request):
@@ -93,4 +93,10 @@ def contact(request):
 	return render_to_response('contact.html', {
 		'form': form,
 	})
+
+def roweditor(request):
+	c = Context({
+	})
+	t = loader.get_template("grid_way.html")
+	return HttpResponse(t.render(c))
 

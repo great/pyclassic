@@ -23,6 +23,7 @@ urlpatterns = patterns('',
 	(r'^lesson/(?P<lesson_id>\d+)/(?P<teacher_id>\d+)$', 'classic.lesson.views.lesson_applies'),
 	(r'^lessons$', 'classic.lesson.views.lessons'),
 	(r'^test$', 'classic.lesson.views.test'),
+	(r'^roweditor/', 'classic.lesson.views.roweditor'),
 	(r'^resources/(?P<path>.*)$', 'django.views.static.serve', {'document_root': APP_BASE + '/classic/resources'}),
 
 )

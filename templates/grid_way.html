@@ -56,7 +56,7 @@
 	</style>
 </head>
 <body>
-<script type="text/javascript">
+<!-- script type="text/javascript">
 Ext.onReady(function(){
 	Ext.QuickTips.init();
 
@@ -268,20 +268,22 @@ Ext.onReady(function(){
 		grid.removeBtn.setDisabled(sm.getCount() < 1);
 	});
 });
-</script>
+</script-->
 
 <script type="text/javascript">
-/*
+var datasource = {};
+
+
 var datastore = new Ext.data.JsonStore({
 	autoLoad:true,
-	//proxy:new Ext.data.HttpProxy({ url:'/test', method:'POST' }),
 	url: '/test',
-	storeId: 'students',
-	root: 'rows'
+	//storeId: 'students',
+	root: 'rows',
+	idProperty: 'empid',
+	fields: ['empid', 'name', 'departmemt', {name: 'base', type: 'int'}, {name: 'operational', type: 'int'}, {name: 'performance', type: 'int'}]
 });
 
 //alert(datastore.getRange(0,15).length);
-*/
 
 var Student = Ext.data.Record.create([
 	{ name: 'empid', type: 'string' },
@@ -322,7 +324,7 @@ Ext.onReady(function(){
 	});
 
 	var grid = new Ext.grid.GridPanel({
-		store: store,
+		store: datastore,
 		width: 750,
 		region:'center',
 		margins: '0 5 5 5',

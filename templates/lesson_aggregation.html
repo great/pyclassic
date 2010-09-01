@@ -1,0 +1,49 @@
+{% load aggregator %}
+<html>
+<head>
+	<title>nhn classical music club lesson fee management app</title>
+	<link rel="stylesheet" type="text/css" href="/media/css/base.css" />
+</head>
+<body>
+<body class="change-list">
+	<div id="container">
+		<div id="header">
+			<div id="branding">
+				<h1>nhnclassic</h1>
+			</div>
+		</div>
+
+		<div id="content" class="flex">
+			<!--table id="result_list" class="docutils"-->
+			<table id="lesson{{teacher.id}}" width="50%">
+				<thead>
+					<tr>
+						<th>수업명</th>
+						<th>강사명</th>
+						<th>수업시간</th>
+						<th>참석인원</th>
+						<th>강사료</th>
+					</tr>
+				</thead>
+				<tbody>
+				{% for teacher in teachers %}
+					<tr class="{% cycle 'row1' 'row2' %}">
+						<td>{{teacher.lesson.alias}}</td>
+						<td>{{teacher.name}}</td>
+						<td>{{teacher.classwork}}</td>
+						<td>{{teacher.students}}</td>
+						<td>{{teacher.fee|formatnum}}</td>
+					</tr>
+				{% endfor %}
+					<tr>
+						<td>총계</td>
+						<td colspan="2"></td>
+						<td>{{students|formatnum}} 명</td>
+						<td>{{fee|formatnum}} 원</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</body>
+</html>

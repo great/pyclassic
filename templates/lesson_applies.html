@@ -48,12 +48,12 @@
 							<td>
 								{% if not student.is_member %}<span style="color:red">{{student.empid}}</span>{% else %}{{student.empid}}{% endif %}
 							</td>
-							<td>{{student.name}}</td>
+							<td>{% if lesson.manager == student.empid %}<strong>{{student.name}}</strong>{% else %}{{student.name}}{% endif %}</td>
 							<td>{{student.department}}</td>
-							<td>{{student.base}}</td>
-							<td>{{student.operational}}</td>
-							<td>{{student.performance}}</td>
-							<td>{{student.net}}</td>
+							<td>{{student.base|formatnum}}</td>
+							<td>{{student.operational|formatnum}}</td>
+							<td>{{student.performance|formatnum}}</td>
+							<td>{{student.net|formatnum}}</td>
 						</tr>
 					{% empty %}
 						<tr>
@@ -79,7 +79,7 @@
 							<td>인원:</td>
 							<td colspan="2">{{teacher.students}}</td>
 							<td colspan="2">지원금 총액:</td>
-							<td colspan="2">{{teacher|payment:students}}</td>
+							<td colspan="2">{{teacher|payment:students|formatnum}}</td>
 						</tr>
 					</tbody>
 				</table>

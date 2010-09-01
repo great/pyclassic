@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.http import HttpResponse
-from classic.master.models import Master
+from classic.utils import *
+from classic.master.models import Master, Member
 from classic.lesson.models import Lesson, Teacher, Student
 from django.template import Context, loader
 from datetime import date
@@ -12,15 +13,17 @@ def lesson_dashboard(request):
 	for teacher in Teacher.objects.all().order_by('name'):
 		if not teacher.students(): continue
 		lesson = teacher.lesson
-		students = list(Student.objects.filter(teacher=teacher.id).order_by('empid'))
+		students = list(Student.objects.filter(teacher=teacher.id).filter(active=True).order_by('empid'))
 		if mapping.has_key(lesson): mapping[lesson][teacher] = students
 		else: mapping[lesson] = {teacher: students}
 
 	t = loader.get_template("lesson_dashboard.html")
 	c = Context({
 		"mapping": mapping,
+		'members': len(Member.objects.exclude(club_role='비회원')),
 	})
 	return HttpResponse(t.render(c))
+
 
 def lesson_applies(request, lesson_id, teacher_id=None):
 	teachers = Teacher.objects.filter(lesson=lesson_id).filter(active=True)
@@ -34,6 +37,25 @@ def lesson_applies(request, lesson_id, teacher_id=None):
 	c = Context({
 		"lesson": Lesson.objects.get(pk=lesson_id),
 		"datasource": datasource,
+	})
+	return HttpResponse(t.render(c))
+
+
+def lesson_aggregation(request):
+	teachers = Teacher.objects.filter(active=True).order_by('lesson')
+
+	students = 0
+	fee = 0
+	for teacher in teachers:
+		students += teacher.students()
+		fee += teacher.fee()
+
+	t = loader.get_template('lesson_aggregation.html')
+	c = Context({
+		'teachers': teachers,
+		'students': students,
+		'fee': fee,
+		
 	})
 	return HttpResponse(t.render(c))
 

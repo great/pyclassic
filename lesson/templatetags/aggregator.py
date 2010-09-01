@@ -1,5 +1,5 @@
 from django.template import Library
-
+from classic.utils import *
 
 register = Library()
 
@@ -36,10 +36,14 @@ def fee_total(mapping):
 	for teacher_map in mapping.values():
 		for teacher, students in teacher_map.items():
 			s += payment(teacher, students)
-	return s
+	return formatted(s)
 
 def reduced(base, amount):
 	return base / amount
+
+def formatnum(num):
+	return formatted(num)
+
 
 register.filter(sum)
 register.filter(payment)
@@ -48,4 +52,5 @@ register.filter(teacher_total)
 register.filter(student_total)
 register.filter(fee_total)
 register.filter(reduced)
+register.filter(formatnum)
 

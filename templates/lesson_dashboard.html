@@ -15,30 +15,20 @@
 
 		<div id="content" class="flex">
 			<table id="result_list" class="docutils">
-				<colgroup>
-					<col width="12" />
-					<col width="25%" />
-					<col width="10%" />
-					<col width="8%" />
-					<col width="16%" />
-					<col width="6%" />
-					<col width="6%" />
-					<col width="6%" />
-					<col width="6%" />
-					<col width="4%" />
-				</colgroup>
 				<thead>
 					<tr>
-						<th class="head">레슨악기</th>
-						<th>강사(인원, 금액)</th>
-						<th>사번</th>
-						<th>이름</th>
-						<th>소속부서</th>
-						<th>기본</th>
-						<th>운영</th>
-						<th>연주</th>
-						<th>계</th>
-						<th>중복</th>
+						<th class="head" width="12%">레슨악기</th>
+						<th width="10%">강사</th>
+						<th width="10%">사번</th>
+						<th width="8%">이름</th>
+						<th width="20%">소속부서</th>
+						<th width="5%">기본</th>
+						<th width="5%">운영</th>
+						<th width="5%">연주</th>
+						<th width="5%">계</th>
+						<th width="4%">중복</th>
+						<th width="5%">인원</th>
+						<th width="10%">총액</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -47,43 +37,51 @@
 						<th rowspan="{{lesson.entries}}"><a href="/lesson/{{lesson.id}}">{{lesson.alias}}</a></th>
 						{% for teacher, students in teachers.items %}
 							{% if not forloop.first %}</tr><tr>{% endif %}
-							<th rowspan="{{teacher.entries}}"><a href="/lesson/{{lesson.id}}/{{teacher.id}}">{{teacher.name}}</a> ({{teacher.students}}, {{teacher|payment:students}})</th>
+							<th rowspan="{{teacher.entries}}"><a href="/lesson/{{lesson.id}}/{{teacher.id}}">{{teacher.name}}</a></th>
 							{% for student in students %}
 								{% if not forloop.first %}</tr><tr>{% endif %}
 								<td>
 									{% if not student.is_member %}<span style="color:red">{{student.empid}}</span>{% else %}{{student.empid}}{% endif %}
 								</td>
-								<td>{{student.name}}</td>
+								<td>
+									{% if lesson.manager == student.empid %}<strong>{{student.name}}</strong>{% else %}{{student.name}}{% endif %}
+								</td>
 								<td>{{student.department}}</td>
 								<td>{{student.base|reduced:10000}}</td>
 								<td>{{student.operational|reduced:10000}}</td>
 								<td>{{student.performance|reduced:10000}}</td>
 								<td>{{student.net|reduced:10000}}</td>
 								<td>{% if student.applies > 1 %}<span style="color:red">*</span>{% endif %}</td>
+								{% if forloop.first %}
+									<td rowspan="{{teacher.entries}}">{{teacher.students}}</td>
+									<td rowspan="{{teacher.entries}}">{{teacher|payment:students|formatnum}}</td>
+								{% endif %}
 							{% endfor %}
 							{% if teacher.has_additional %}
 								{% for expense in teacher.additional %}
 									</tr><tr class="row1">
 										<td colspan="2">{{expense.desc}}</td>
-										<td colspan="5">{{expense.amount}}</td>
+										<td colspan="5">{{expense.amount|formatnum}}</td>
 										<td class="row2"></td>
 								{% endfor %}
 							{% endif %}
 						{% endfor %}
 					</tr>
 					<tr>
-						<td colspan="10">::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::</td>
+						<td colspan="12">::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::</td>
 					</tr>
 					{% empty %}
 					<tr>
-						<td colspan="10">No members yet.</td>
+						<td colspan="12">No members yet.</td>
 					</tr>
 					{% endfor %}
-					<tr>
+					<tr class="row1">
 						<th>레슨: {{mapping|lesson_total}}종</th>
 						<th>강사: {{mapping|teacher_total}}명</th>
-						<th colspan="3">신청인원: {{mapping|student_total}}명</th>
+						<th colspan="3">신청인원/총회원 수: {{mapping|student_total}} 명 / {{members}} 명</th>
 						<th colspan="4">지원금액: {{mapping|fee_total}}원</th>
+						<th></th>
+						<th></th>
 						<th></th>
 					</tr>
 				</tbody>

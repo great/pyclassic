@@ -84,12 +84,14 @@ class Teacher(models.Model):
 	name		= models.CharField("이름", max_length=50)
 	cellular	= models.CharField("핸드폰번호", blank=True, max_length=20)
 	email		= models.EmailField(blank=True, max_length=100)
+	classwork	= models.CharField("수업시간", blank=True, max_length=200)
 	lesson		= models.ForeignKey(Lesson)
 	active		= models.BooleanField(default=True)
 
 	def __init__(self, *args, **kwargs):
 		super(Teacher, self).__init__(*args, **kwargs) 
 		self.expenses = list(Expense.objects.filter(teacher=self.id))
+		self.active_students = Student.objects.filter(teacher=self.id).filter(active=True)
 
 	def __unicode__(self):
 		return self.name
@@ -101,11 +103,16 @@ class Teacher(models.Model):
 		return self.expenses
 
 	def students(self):
-		return len(Student.objects.filter(teacher=self.id))
+		return len(self.active_students)
 
 	def entries(self):
-		return len(Student.objects.filter(teacher=self.id)) + len(self.expenses)
+		return len(self.active_students) + len(self.expenses)
 
+	def fee(self):
+		s = 0
+		for expense in self.expenses: s += expense.amount
+		for student in self.active_students: s += student.net()
+		return s
 
 ''' for the practical reason, FK not used:
 when members deleted from Member model, automatically deleted from Student.
@@ -118,6 +125,7 @@ class Student(models.Model):
 	base		= models.IntegerField("기본", default=0)
 	operational	= models.IntegerField("운영", default=0)
 	performance	= models.IntegerField("연주", default=0)
+	active		= models.BooleanField(default=True)
 
 	def __init__(self, *args, **kwargs):
 		super(Student, self).__init__(*args, **kwargs) 

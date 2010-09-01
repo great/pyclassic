@@ -1,3 +1,4 @@
+{% load aggregator %}
 <html>
 <head>
 	<title>nhn classical music club lesson fee management app</title>
@@ -54,7 +55,7 @@
 							<td>{{student.performance}}</td>
 							<td>{{student.net}}</td>
 						</tr>
-						{% empty %}
+					{% empty %}
 						<tr>
 							<td colspan="7">No applies yet.</td>
 						</tr>
@@ -67,7 +68,19 @@
 							<td><input type="text" name="performance" /></td>
 							<td>0</td>
 						</tr>
-						{% endfor %}
+					{% endfor %}
+					{% for expense in teacher.additional %}
+						<tr>
+							<td colspan="3">{{expense.desc}}</td>
+							<td colspan="4">{{expense.amount}}</td>
+						</tr>
+					{% endfor %}
+						<tr>
+							<td>인원:</td>
+							<td colspan="2">{{teacher.students}}</td>
+							<td colspan="2">지원금 총액:</td>
+							<td colspan="2">{{teacher|payment:students}}</td>
+						</tr>
 					</tbody>
 				</table>
 				<script type="text/javascript">

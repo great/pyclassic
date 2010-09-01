@@ -9,29 +9,43 @@ def sum(students):
 	for student in students: s+= student.net()
 	return s
 
+def payment(teacher, students):
+	s=0
+	for expense in teacher.additional(): s+= expense.amount
+	for student in students: s+= student.net()
+	return s
 
-def lesson_total(datasource):
-	return len(datasource)
+def lesson_total(mapping):
+	return len(mapping)
 
-def teacher_total(datasource):
+def teacher_total(mapping):
 	s = 0
-	for lesson in datasource.keys():
+	for lesson in mapping.keys():
 		s += lesson.teachers()
 	return s
 
-def student_total(reduced):
-	return len(reduced)
-
-def fee_total(reduced):
+def student_total(mapping):
 	s = 0
-	for student in reduced:
-		s += student.net()
-	return s * 10000
+	for lesson in mapping.keys():
+		s += lesson.students()
+	return s
 
+def fee_total(mapping):
+	s = 0
+	dict_list = []
+	for teacher_map in mapping.values():
+		for teacher, students in teacher_map.items():
+			s += payment(teacher, students)
+	return s
+
+def reduced(base, amount):
+	return base / amount
 
 register.filter(sum)
+register.filter(payment)
 register.filter(lesson_total)
 register.filter(teacher_total)
 register.filter(student_total)
 register.filter(fee_total)
+register.filter(reduced)
 

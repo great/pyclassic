@@ -73,6 +73,12 @@ class Lesson(models.Model):
 		for teacher in teachers: students += teacher.students()
 		return students
 
+	def entries(self):
+		teachers = Teacher.objects.filter(lesson=self.id).filter(active=True)
+		s = 0
+		for teacher in teachers: s += teacher.entries()
+		return s
+
 
 class Teacher(models.Model):
 	name		= models.CharField("이름", max_length=50)
@@ -81,11 +87,25 @@ class Teacher(models.Model):
 	lesson		= models.ForeignKey(Lesson)
 	active		= models.BooleanField(default=True)
 
+	def __init__(self, *args, **kwargs):
+		super(Teacher, self).__init__(*args, **kwargs) 
+		self.expenses = list(Expense.objects.filter(teacher=self.id))
+
 	def __unicode__(self):
 		return self.name
 
+	def has_additional(self):
+		return bool(self.expenses)
+
+	def additional(self):
+		return self.expenses
+
 	def students(self):
 		return len(Student.objects.filter(teacher=self.id))
+
+	def entries(self):
+		return len(Student.objects.filter(teacher=self.id)) + len(self.expenses)
+
 
 ''' for the practical reason, FK not used:
 when members deleted from Member model, automatically deleted from Student.
@@ -133,6 +153,7 @@ class Expense(models.Model):
 	ITEM_CHOICES = (
 		('GROUP', 'Group Lesson'),
 		('PARKING', 'Parking fee'),
+		('CLUB_OP', 'Club Operational'),
 	)
 	teacher	= models.ForeignKey(Teacher)
 	item	= models.CharField(max_length=10, choices=ITEM_CHOICES)

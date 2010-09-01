@@ -2,7 +2,6 @@
 from django.http import HttpResponse
 from classic.master.models import Master
 from classic.lesson.models import Lesson, Teacher, Student
-#from classic.lesson.forms import LessonClassForm
 from django.template import Context, loader
 from datetime import date
 from classic.extjs import grids, utils
@@ -10,16 +9,19 @@ from classic.extjs import grids, utils
 
 def lesson_dashboard(request):
 	mapping = {}
+	reduced = []
 	for teacher in Teacher.objects.all():
 		if not teacher.students(): continue
 		lesson = teacher.lesson
-		students = list(Student.objects.filter(teacher=teacher.id))
+		students = list(Student.objects.filter(teacher=teacher.id).order_by('empid'))
+		reduced += students
 		if mapping.has_key(lesson): mapping[lesson][teacher] = students
 		else: mapping[lesson] = {teacher: students}
 
 	t = loader.get_template("lesson_dashboard.html")
 	c = Context({
 		"mapping": mapping,
+		"reduced": reduced,
 	})
 	return HttpResponse(t.render(c))
 
@@ -29,7 +31,7 @@ def lesson_applies(request, lesson_id, teacher_id=None):
 
 	datasource = {}
 	for teacher in teachers:
-		datasource[teacher] = Student.objects.filter(teacher=teacher.id)
+		datasource[teacher] = Student.objects.filter(teacher=teacher.id).order_by('empid')
 
 	t = loader.get_template("lesson_applies.html")
 	c = Context({

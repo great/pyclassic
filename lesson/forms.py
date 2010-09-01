@@ -1,5 +1,5 @@
 from django import forms
-from classic.lesson.models import LessonClass, Teacher
+from classic.lesson.models import LessonStudent, Teacher
 
 
 class ContactForm(forms.Form):
@@ -9,9 +9,9 @@ class ContactForm(forms.Form):
 	cc_myself = forms.BooleanField(required=False)
 
 
-class LessonClassForm(forms.ModelForm):
+class StudentForm(forms.ModelForm):
 	class Meta:
-		model = LessonClass
+		model = Student
 
 
 class TeacherForm(forms.Teacher):

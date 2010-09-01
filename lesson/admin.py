@@ -10,7 +10,7 @@ class TeacherAdmin(admin.ModelAdmin):
 	list_filter = ('lesson',)
 
 class StudentAdmin(admin.ModelAdmin):
-	list_display = ('empid', 'teacher', 'base', 'operational', 'performance')
+	list_display = ('empid', 'name', 'teacher', 'base', 'operational', 'performance')
 	list_filter = ('teacher',)
 
 class ExpenseAdmin(admin.ModelAdmin):

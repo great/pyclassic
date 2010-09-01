@@ -10,8 +10,8 @@ from classic.extjs import grids, utils
 
 def lesson_dashboard(request):
 	mapping = {}
-	for teacher in Teacher.objects.all().order_by('name'):
-		if not teacher.students(): continue
+	for teacher in Teacher.objects.filter(active=True).order_by('name'):
+		#if not teacher.students(): continue
 		lesson = teacher.lesson
 		students = list(Student.objects.filter(teacher=teacher.id).filter(active=True).order_by('empid'))
 		if mapping.has_key(lesson): mapping[lesson][teacher] = students

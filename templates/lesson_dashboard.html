@@ -59,20 +59,14 @@
 							{% endfor %}
 							{% if teacher.has_additional %}
 								{% for expense in teacher.additional %}
-									</tr><tr class="row1">
+									{% if teacher.students or not forloop.first %}</tr><tr class="row1">{% endif %}
+										<td></td>
 										<td colspan="2">{{expense.desc}}</td>
-										<td colspan="5">{{expense.amount|formatnum}}</td>
+										<td colspan="4">{{expense.amount|formatnum}}</td>
 										<td class="row2"></td>
 								{% endfor %}
 							{% endif %}
 						{% endfor %}
-					</tr>
-					<tr>
-						<td colspan="12">::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::</td>
-					</tr>
-					{% empty %}
-					<tr>
-						<td colspan="12">No members yet.</td>
 					</tr>
 					{% endfor %}
 					<tr class="row1">

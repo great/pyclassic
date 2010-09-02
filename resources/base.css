@@ -131,9 +131,10 @@ div.admonition-behind-the-scenes { padding-left:65px; background:url(../img/doc/
 #documentation dd { margin-left:1em; }
 #content-main table { color:#000; }
 table.docutils { border-collapse:collapse; }
-table.docutils thead th { border-bottom:2px solid #dfdfdf; text-align:left; }
-table.docutils td, table.docutils th { border-bottom:1px solid #dfdfdf; padding:4px 2px;}
+table.docutils thead th { border-bottom:2px solid #dfdfdf; text-align:center; }
+table.docutils td, table.docutils th { border:1px solid #dfdfdf; padding:4px 2px;}
 table.docutils td p { margin-top:0; margin-bottom:.5em; }
+table.docutils tbody tr td.number { text-align:right; }
 #documentation #content-related .literal { background:transparent !important; }
 div.versionadded span.title, div.versionchanged span.title { font-weight: bold; }
 

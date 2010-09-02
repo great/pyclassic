@@ -37,6 +37,13 @@ class Lesson(models.Model):
 		else:
 			return ''
 
+	def manager_department(self):
+		self.init_member()
+		if self.member:
+			return self.member.department
+		else:
+			return ''
+
 	def manager_email(self):
 		self.init_member()
 		if self.member:

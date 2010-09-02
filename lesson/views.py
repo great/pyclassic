@@ -60,11 +60,21 @@ def lesson_aggregation(request):
 	return HttpResponse(t.render(c))
 
 
-def lessons(request):
+def frontpage(request):
 	lessons = Lesson.objects.all()
 	datasource = {}
 	for lesson in lessons: datasource[lesson] = Teacher.objects.filter(lesson=lesson.id)
 	t = loader.get_template("lessons.html")
+	c = Context({
+		"datasource": datasource,
+	})
+	return HttpResponse(t.render(c))
+
+def lessons(request):
+	lessons = Lesson.objects.all()
+	datasource = {}
+	for lesson in lessons: datasource[lesson] = Teacher.objects.filter(lesson=lesson.id)
+	t = loader.get_template("lessons_detailed.html")
 	c = Context({
 		"datasource": datasource,
 	})

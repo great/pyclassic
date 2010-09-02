@@ -1,8 +1,7 @@
 <html>
 <head>
 	<title>nhn classical music club lesson fee management app</title>
-	<link rel="stylesheet" type="text/css" href="/media/css/base.css" />
-	<!-- link href="/resources/base.css" rel="stylesheet" type="text/css" media="screen" / -->
+	<link href="/resources/waterspill/style.css" rel="stylesheet" type="text/css" media="screen" />
 </head>
 <body class="change-list">
 	<div id="container">
@@ -12,8 +11,20 @@
 			</div>
 		</div>
 
-		<div id="content" class="flex">
-			<table id="result_list" class="docutils">
+		<div id="topMenu">
+			<ul>
+				<li><a href="#">Home</a></li>
+				<li>&ndash;</li>
+				<li><a href="#">Home</a></li>
+				<li>&ndash;</li>
+				<li><a href="#">Home</a></li>
+				<li>&ndash;</li>
+				<li><a href="#">Home</a></li>
+			</ul>
+		</div>
+
+		<div id="main">
+			<table id="result_list">
 				<thead>
 					<tr>
 						<th rowspan="2" class="head">레슨</th>
@@ -30,14 +41,14 @@
 				</thead>
 				<tbody>
 					{% for lesson, teachers in datasource.items %}
-					<tr>
+					<tr class="separator">
 						<th rowspan="{{lesson.safe_rowspan}}">{{lesson.alias}}</th>
-						<th rowspan="{{lesson.safe_rowspan}}">{{lesson.desc}}</th>
+						<td rowspan="{{lesson.safe_rowspan}}">{{lesson.desc}}</td>
 						<th rowspan="{{lesson.safe_rowspan}}">{{lesson.manager_name}}</th>
-						<th rowspan="{{lesson.safe_rowspan}}">{{lesson.manager_department}}</th>
+						<td rowspan="{{lesson.safe_rowspan}}">{{lesson.manager_department}}</td>
 						{% for teacher in teachers %}
 							{% if not forloop.first %}</tr><tr>{% endif %}
-							<th>{{teacher.name}}</th>
+							<td>{{teacher.name}}</td>
 							<td>{{teacher.classwork}}</td>
 						{% empty %}
 							<th colspan="2">No teachers yet.</th>
@@ -51,6 +62,10 @@
 				</tbody>
 			</table>
 		</div>
+
+		<div id="footer">
+			<p>Copyright &copy; http://club.nhn.com/classic | Terms | Site Map | Contact</p>
+		</div><!-- end #footer -->
 	</div>
 </body>
 </html>

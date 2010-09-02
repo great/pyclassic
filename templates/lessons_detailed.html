@@ -1,0 +1,60 @@
+<html>
+<head>
+	<title>nhn classical music club lesson fee management app</title>
+	<link rel="stylesheet" type="text/css" href="/media/css/base.css" />
+	<!-- link href="/resources/base.css" rel="stylesheet" type="text/css" media="screen" / -->
+</head>
+<body class="change-list">
+	<div id="container">
+		<div id="header">
+			<div id="branding">
+				<h1>nhnclassic Lessons</h1>
+			</div>
+		</div>
+
+		<div id="content" class="flex">
+			<table id="result_list" class="docutils">
+				<thead>
+					<tr>
+						<th rowspan="2" class="head">레슨</th>
+						<th rowspan="2" class="head">비고</th>
+						<th colspan="3" class="head">레슨대표</th>
+						<th colspan="3" class="head">강사</th>
+					</tr>
+					<tr>
+						<th>이름</th>
+						<th>핸드폰</th>
+						<th>email</th>
+						<th>이름</th>
+						<th>핸드폰</th>
+						<th>email</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for lesson, teachers in datasource.items %}
+					<tr>
+						<th rowspan="{{lesson.safe_rowspan}}">{{lesson.alias}}</th>
+						<th rowspan="{{lesson.safe_rowspan}}">{{lesson.desc}}</th>
+						<th rowspan="{{lesson.safe_rowspan}}">{{lesson.manager_name}}</th>
+						<th rowspan="{{lesson.safe_rowspan}}">{{lesson.manager_cellular}}</th>
+						<th rowspan="{{lesson.safe_rowspan}}">{{lesson.manager_email}}</th>
+						{% for teacher in teachers %}
+							{% if not forloop.first %}</tr><tr>{% endif %}
+							<th>{{teacher.name}}</th>
+							<td>{{teacher.cellular}}</td>
+							<td>{{teacher.email}}</td>
+						{% empty %}
+							<th colspan="3">No teachers yet.</th>
+						{% endfor %}
+					</tr>
+					{% empty %}
+					<tr>
+						<td colspan="7">No lessons.<br />Contact to club leader.</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</body>
+</html>

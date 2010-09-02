@@ -1,16 +1,34 @@
-{% load aggregator %}
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title>nhn classical music club lesson fee management app</title>
-	<link rel="stylesheet" type="text/css" href="/media/css/base.css" />
+	<!--link rel="stylesheet" type="text/css" href="/media/css/base.css" /-->
 	<!-- link href="/resources/base.css" rel="stylesheet" type="text/css" media="screen" / -->
+	<link href="/resources/waterspill/style.css" rel="stylesheet" type="text/css" media="screen" />
+	<!--[if IE]>
+	<style type="text/css"> 
+	.twoColFixRtHdr #mainContent { zoom: 1; }
+	</style>
+	<![endif]-->
 </head>
+{% load aggregator %}
 <body class="change-list">
 	<div id="container">
 		<div id="header">
-			<div id="branding">
-				<h1>Lesson Apply Management</h1>
-			</div>
+			<h1>Lesson Apply Management</h1>
+		</div>
+
+		<div id="topMenu">
+			<ul>
+				<li><a href="#">Home</a></li>
+				<li>&ndash;</li>
+				<li><a href="#">Home</a></li>
+				<li>&ndash;</li>
+				<li><a href="#">Home</a></li>
+				<li>&ndash;</li>
+				<li><a href="#">Home</a></li>
+			</ul>
 		</div>
 
 		<div id="content" class="flex">
@@ -33,7 +51,7 @@
 				</thead>
 				<tbody>
 					{% for lesson, teachers in mapping.items %}
-					<tr>
+					<tr class="separator">
 						<th rowspan="{{lesson.entries}}"><a href="/lesson/{{lesson.id}}">{{lesson.alias}}</a></th>
 						{% for teacher, students in teachers.items %}
 							{% if not forloop.first %}</tr><tr>{% endif %}

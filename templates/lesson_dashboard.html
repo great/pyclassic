@@ -21,31 +21,31 @@
 
 		<div id="topMenu">
 			<ul>
-				<li><a href="#">Home</a></li>
+				<li><a href="/">Lessons</a></li>
 				<li>&ndash;</li>
-				<li><a href="#">Home</a></li>
+				<li><a href="/lesson/dashboard">Dashboard</a></li>
 				<li>&ndash;</li>
-				<li><a href="#">Home</a></li>
+				<li><a href="/lesson/aggregation">Aggregation</a></li>
 				<li>&ndash;</li>
 				<li><a href="#">Home</a></li>
 			</ul>
 		</div>
 
-		<div id="content" class="flex">
-			<table id="result_list" class="docutils">
+		<div id="main" class="flex">
+			<table id="result_list">
 				<thead>
 					<tr>
-						<th class="head" width="12%">레슨악기</th>
+						<th class="head" width="14%">레슨악기</th>
 						<th width="10%">강사</th>
 						<th width="10%">사번</th>
 						<th width="10%">이름</th>
-						<th width="20%">소속부서</th>
-						<th width="5%">기본</th>
-						<th width="5%">운영</th>
-						<th width="5%">연주</th>
+						<th width="23%">소속부서</th>
+						<th width="4%">기<br />본</th>
+						<th width="4%">운<br />영</th>
+						<th width="4%">연<br />주</th>
 						<th width="5%">계</th>
 						<th width="5%">인원</th>
-						<th width="12%">총액</th>
+						<th width="10%">총액</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -65,42 +65,43 @@
 									{% if student.applies > 1 %}<span style="color:red">*</span>{% endif %}
 								</td>
 								<td>{{student.department}}</td>
-								<td>{{student.base|reduced:10000}}</td>
-								<td>{{student.operational|reduced:10000}}</td>
-								<td>{{student.performance|reduced:10000}}</td>
-								<td>{{student.net|reduced:10000}}</td>
+								<td class="number">{{student.base|reduced:10000}}</td>
+								<td class="number">{{student.operational|reduced:10000}}</td>
+								<td class="number">{{student.performance|reduced:10000}}</td>
+								<td class="number">{{student.net|reduced:10000}}</td>
 								{% if forloop.first %}
-									<td rowspan="{{teacher.entries}}">{{teacher.students}}</td>
+									<td rowspan="{{teacher.entries}}" class="number">{{teacher.students}}</td>
 									<td rowspan="{{teacher.entries}}" class="number">{{teacher|payment:students|formatnum}}</td>
 								{% endif %}
 							{% endfor %}
 							{% if teacher.has_additional %}
 								{% for expense in teacher.additional %}
 									{% if teacher.students or not forloop.first %}</tr><tr>{% endif %}
-									<td class="row1"></td>
-									<td colspan="2" class="row1">{{expense.desc}}</td>
-									<td colspan="3" class="row1">{{expense.amount|formatnum}}</td>
-									<td class="row1"></td>
+									<td></td>
+									<td colspan="2">{{expense.desc}}</td>
+									<td colspan="4" class="number">{{expense.amount|formatnum}}</td>
 									{% if not teacher.students and forloop.first %}
-										<td rowspan="{{teacher.entries}}">{{teacher.students}}</td>
-										<td rowspan="{{teacher.entries}}">{{teacher|payment:students|formatnum}}</td>
+										<td rowspan="{{teacher.entries}}" class="number">{{teacher.students}}</td>
+										<td rowspan="{{teacher.entries}}" class="number">{{teacher|payment:students|formatnum}}</td>
 									{% endif %}
 								{% endfor %}
 							{% endif %}
 						{% endfor %}
 					</tr>
 					{% endfor %}
-					<tr class="row1">
-						<th>레슨: {{mapping|lesson_total}}종</th>
-						<th>강사: {{mapping|teacher_total}}명</th>
-						<th colspan="3">신청인원/총회원 수: {{mapping|student_total}} 명 / {{members}} 명</th>
-						<th colspan="4" class="number">지원금액: {{mapping|fee_total}}원</th>
-						<th></th>
-						<th></th>
+					<tr>
+						<th class="number">레슨:{{mapping|lesson_total}}종</th>
+						<th colspan="2" class="number">강사:{{mapping|teacher_total}}명</th>
+						<th colspan="6" class="number">신청인원/총회원 수: {{mapping|student_total}} 명 / {{members}} 명</th>
+						<th colspan="2" class="number">{{mapping|fee_total}}원</th>
 					</tr>
 				</tbody>
 			</table>
 		</div>
+
+		<div id="footer">
+			<p>Copyright &copy; http://club.nhn.com/classic | Terms | Site Map | Contact</p>
+		</div><!-- end #footer -->
 	</div>
 </body>
 </html>

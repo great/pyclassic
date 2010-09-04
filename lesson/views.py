@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from classic.utils import *
 from classic.master.models import Master, Member
 from classic.lesson.models import Lesson, Teacher, Student
+from classic.lesson.forms import StudentForm
 from django.template import Context, loader
 from datetime import date
 from classic.extjs import grids, utils
@@ -31,12 +32,13 @@ def lesson_applies(request, lesson_id, teacher_id=None):
 
 	datasource = {}
 	for teacher in teachers:
-		datasource[teacher] = Student.objects.filter(teacher=teacher.id).order_by('empid')
-
-	t = loader.get_template("lesson_applies.html")
+		datasource[teacher] = Student.objects.filter(teacher=teacher.id).filter(active=True).order_by('empid')
+	form = StudentForm()
+	t = loader.get_template('lesson_applies.html')
 	c = Context({
-		"lesson": Lesson.objects.get(pk=lesson_id),
-		"datasource": datasource,
+		'lesson': Lesson.objects.get(pk=lesson_id),
+		'datasource': datasource,
+		'form': form,
 	})
 	return HttpResponse(t.render(c))
 

@@ -1,20 +1,17 @@
-from django import forms
-from classic.lesson.models import LessonStudent, Teacher
+from django.forms import *
+
+class ContactForm(Form):
+	subject = CharField(max_length=100)
+	message = CharField()
+	sender = EmailField()
+	cc_myself = BooleanField(required=False)
 
 
-class ContactForm(forms.Form):
-	subject = forms.CharField(max_length=100)
-	message = forms.CharField()
-	sender = forms.EmailField()
-	cc_myself = forms.BooleanField(required=False)
-
-
-class StudentForm(forms.ModelForm):
-	class Meta:
-		model = Student
-
-
-class TeacherForm(forms.Teacher):
-	class Teacher:
-		model = Teacher
-		fields = ('name',)
+class StudentForm(Form):
+	empid		= CharField(max_length=7)
+	name		= CharField(max_length=100)
+	department	= CharField(max_length=100)
+	base		= IntegerField()
+	operational	= IntegerField()
+	performance	= IntegerField()
+	#teacher		= HiddenField()

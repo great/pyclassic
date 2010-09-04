@@ -2,20 +2,26 @@
 <html>
 <head>
 	<title>nhn classical music club lesson fee management app</title>
-	<link rel="stylesheet" type="text/css" href="/media/css/base.css" />
+	<link href="/resources/waterspill/style.css" rel="stylesheet" type="text/css" media="screen" />
+	<!--[if IE]>
+	<style type="text/css"> 
+	.twoColFixRtHdr #mainContent { zoom: 1; }
+	</style>
+	<![endif]-->
 </head>
 <body>
 <body class="change-list">
 	<div id="container">
 		<div id="header">
-			<div id="branding">
-				<h1>nhnclassic</h1>
-			</div>
+			<h1>nhnclassic</h1>
 		</div>
 
-		<div id="content" class="flex">
-			<!--table id="result_list" class="docutils"-->
-			<table id="lesson{{teacher.id}}" width="50%">
+		<div id="topMenu">
+			{% include "menu.html" %}
+		</div>
+
+		<div id="main">
+			<table id="lesson{{teacher.id}}">
 				<thead>
 					<tr>
 						<th>수업명</th>
@@ -27,23 +33,27 @@
 				</thead>
 				<tbody>
 				{% for teacher in teachers %}
-					<tr class="{% cycle 'row1' 'row2' %}">
+					<tr>
 						<td>{{teacher.lesson.alias}}</td>
 						<td>{{teacher.name}}</td>
 						<td>{{teacher.classwork}}</td>
-						<td>{{teacher.students}}</td>
-						<td>{{teacher.fee|formatnum}}</td>
+						<td class="number">{% if teacher.students %}{{teacher.students}} 명{% else %}&ndash;&nbsp;{% endif %}</td>
+						<td class="number">{{teacher.fee|formatnum}} 원</td>
 					</tr>
 				{% endfor %}
 					<tr>
 						<td>총계</td>
 						<td colspan="2"></td>
-						<td>{{students|formatnum}} 명</td>
-						<td>{{fee|formatnum}} 원</td>
+						<td class="number">{{students|formatnum}} 명</td>
+						<td class="number">{{fee|formatnum}} 원</td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
+
+		<div id="footer">
+			<p>Copyright &copy; http://club.nhn.com/classic | Terms | Site Map | Contact</p>
+		</div><!-- end #footer -->
 	</div>
 </body>
 </html>

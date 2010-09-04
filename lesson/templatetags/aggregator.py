@@ -53,4 +53,3 @@ register.filter(student_total)
 register.filter(fee_total)
 register.filter(reduced)
 register.filter(formatnum)
-

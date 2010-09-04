@@ -7,18 +7,18 @@
 	<div id="container">
 		<div id="header">
 			<div id="branding">
-				<h1>nhnclassic Lessons</h1>
+				<h1>nhnclassic: Lessons</h1>
 			</div>
 		</div>
 
 		<div id="topMenu">
 			<ul>
 				<li><a href="/">Lessons</a></li>
-				<li>&ndash;</li>
+				<li>|</li>
 				<li><a href="/lesson/dashboard">Dashboard</a></li>
-				<li>&ndash;</li>
+				<li>|</li>
 				<li><a href="/lesson/aggregation">Aggregation</a></li>
-				<li>&ndash;</li>
+				<li>|</li>
 				<li><a href="#">Home</a></li>
 			</ul>
 		</div>
@@ -28,14 +28,13 @@
 				<thead>
 					<tr>
 						<th rowspan="2" class="head">레슨</th>
-						<th rowspan="2" class="head">비고</th>
 						<th colspan="2" class="head">레슨대표</th>
-						<th colspan="2" class="head">강사</th>
+						<th colspan="2" class="head">레슨정보</th>
 					</tr>
 					<tr>
 						<th>이름</th>
 						<th>부서</th>
-						<th>이름</th>
+						<th>강사명</th>
 						<th>수업시간</th>
 					</tr>
 				</thead>
@@ -43,7 +42,6 @@
 					{% for lesson, teachers in datasource.items %}
 					<tr class="separator">
 						<th rowspan="{{lesson.safe_rowspan}}">{{lesson.alias}}</th>
-						<td rowspan="{{lesson.safe_rowspan}}">{{lesson.desc}}</td>
 						<th rowspan="{{lesson.safe_rowspan}}">{{lesson.manager_name}}</th>
 						<td rowspan="{{lesson.safe_rowspan}}">{{lesson.manager_department}}</td>
 						{% for teacher in teachers %}
@@ -61,6 +59,9 @@
 					{% endfor %}
 				</tbody>
 			</table>
+			<ul>
+				<li>기타 레슨 관련 문의: 김인태(카페서비스개발1팀)</li>
+			</ul>
 		</div>
 
 		<div id="footer">

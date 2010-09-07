@@ -19,10 +19,18 @@
 	<script type="text/javascript" src="/resources/connector/js/Ext.ux.DjangoForms.js"></script>
 	<link rel="stylesheet" type="text/css" href="/resources/extjs/resources/css/ext-all.css" /> 
 	<link rel="stylesheet" type="text/css" href="/resources/connector/css/genericforms.css" />
+	<script type="text/javascript" src="/resources/jquery/js/jquery-1.4.2.min.js"></script>
+	<script type="text/javascript" src="/resources/jquery/js/jquery-ui-1.8.4.custom.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="/resources/jquery/css/ui-lightness/jquery-ui-1.8.4.custom.css" />
 	<script type="text/javascript">
 		function switchGrid(teacher_id) {
 			new Ext.ux.grid.TableGrid('lesson' + teacher_id, { stripeRows: true }).render();
 		}
+
+	$(function() {
+		$("#dialog").dialog();
+	});
+
 	</script>
 </head>
 <body>
@@ -56,7 +64,7 @@
 				</thead>
 				{% for student in students %}
 				<tbody>
-					<tr>
+					<tr id="{{student.empid}}">
 						<td>
 							{% if not student.is_member %}<span style="color:red">{{student.empid}}</span>{% else %}{{student.empid}}{% endif %}
 						</td>
@@ -97,6 +105,11 @@
 			<p>Copyright &copy; http://club.nhn.com/classic | Terms | Site Map | Contact</p>
 		</div><!-- end #footer -->
 	</div>
+
+<div id="dialog" title="Basic dialog">
+	<p>This is the default dialog which is useful for displaying information. The dialog window can be moved, resized and closed with the 'x' icon.</p>
+</div>
+
 <script type="text/javascript">
 /*
 
